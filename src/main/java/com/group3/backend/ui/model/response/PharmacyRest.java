@@ -4,15 +4,24 @@ public class PharmacyRest {
     private String email;
     private String address;
     private String phoneNumb;
-    private Long userId;
+    private Long careHomeId;
+    private boolean isDefault = false;
     private String name;
 
-    public Long getUserId() {
-        return userId;
+    public Long getCareHomeId() {
+        return careHomeId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setCareHomeId(Long careHomeId) {
+        this.careHomeId = careHomeId;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public String getName() {

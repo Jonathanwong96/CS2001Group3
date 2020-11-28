@@ -19,7 +19,8 @@ public class PharmacyEntity implements Serializable {
     @Column(nullable=false)
     private String phoneNumb;
     @Column(nullable=false)
-    private Long userId;
+    private Long careHomeId;
+    private boolean isDefault;
     private String address;
 
     public long getId() {
@@ -58,11 +59,19 @@ public class PharmacyEntity implements Serializable {
         this.phoneNumb = phoneNumb;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getCareHomeId() {
+        return careHomeId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setCareHomeId(Long careHomeId) {
+        this.careHomeId = careHomeId;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
