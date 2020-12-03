@@ -3,7 +3,7 @@ package com.group3.backend.ui.model.request;
 //we use different classes for requests in vs responses out. In this case it doesn't matter as they are the
 // same, but if we had a UserRequestModel, which accepts a password, we wouldn't want to send that
 // out again
-public class PharmacyDetailsRequestModel {
+public class PharmacyRequest {
     private String email;
     private String address;
     private String phoneNumb;

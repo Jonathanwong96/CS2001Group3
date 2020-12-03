@@ -1,6 +1,6 @@
 package com.group3.backend.ui.model.response;
 
-public class PharmacyRest {
+public class PharmacyResponse {
     private String email;
     private String address;
     private String phoneNumb;
