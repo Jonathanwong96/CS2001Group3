@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity(name="pharmacy")
-public class PharmacyEntity {
+public class PharmacyEntity implements Serializable {
     @Id
     @GeneratedValue
     private long id;
@@ -17,9 +17,10 @@ public class PharmacyEntity {
     @Column(nullable=false)
     private String email;
     @Column(nullable=false)
+    private String phoneNumb;
+    @Column(nullable=false)
     private Long careHomeId;
     private boolean isDefault;
-    private String phoneNumb;
     private String address;
 
     public long getId() {
