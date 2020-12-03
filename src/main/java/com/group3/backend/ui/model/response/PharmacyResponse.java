@@ -1,14 +1,11 @@
-package com.group3.backend.ui.model.request;
+package com.group3.backend.ui.model.response;
 
-//we use different classes for requests in vs responses out. In this case it doesn't matter as they are the
-// same, but if we had a UserRequestModel, which accepts a password, we wouldn't want to send that
-// out again
-public class PharmacyDetailsRequestModel {
+public class PharmacyResponse {
     private String email;
     private String address;
     private String phoneNumb;
     private Long careHomeId;
-    private boolean isDefault;
+    private boolean isDefault = false;
     private String name;
 
     public Long getCareHomeId() {
