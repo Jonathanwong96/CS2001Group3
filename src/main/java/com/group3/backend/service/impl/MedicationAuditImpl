@@ -1,0 +1,32 @@
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.group3.backend.datasource.entity.MedicationAuditEntity;
+import com.group3.backend.datasource.repos.MedicationAuditRepository;
+import com.group3.backend.service.MedicationAuditService;
+import com.group3.backend.ui.model.request.MedicationAuditRequest;
+import com.group3.backend.ui.model.response.MedicationAuditResponse;
+
+@Service
+public class MedicationAuditImpl implements MedicationAuditService {
+
+	    @Autowired
+	    MedicationAuditRepository medicationAuditRepository;
+
+	    @Override
+	    public MedicationAuditResponse createAudit(MedicationAuditRequest medicationAuditRequest) {
+
+	    	MedicationAuditResponse toReturn = new MedicationAuditResponse();
+	    	MedicationAuditEntity auditEntity = new MedicationAuditEntity();
+	        BeanUtils.copyProperties(medicationAuditRequest, auditEntity);
+	        MedicationAuditEntity savedAudit = medicationAuditRepository.save(auditEntity);
+	        BeanUtils.copyProperties(savedAudit, toReturn);
+
+	        return toReturn;
+	    }
+
+
+}

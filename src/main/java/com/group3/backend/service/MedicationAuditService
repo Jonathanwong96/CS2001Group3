@@ -1,0 +1,11 @@
+package com.group3.backend.service;
+
+
+import com.group3.backend.ui.model.request.MedicationAuditRequest;
+import com.group3.backend.ui.model.response.MedicationAuditResponse;
+
+public interface MedicationAuditService {
+
+	MedicationAuditResponse createAudit(MedicationAuditRequest medicationAudit);
+//    ArrayList<PharmacyResponse> getAllPharmaciesForHome(long careHomeId);
+}
