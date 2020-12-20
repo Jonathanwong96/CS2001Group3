@@ -1,7 +1,8 @@
 package com.group3.backend.ui.model.response;
 
 public enum ErrorMessages {
-	COULD_NOT_FIND("Could not find an item that matches the request.");
+	COULD_NOT_FIND("Could not find an item that matches the request."), 
+	BAD_DATE_FORMAT("Could not parse this date");
 	
 	private String errorMessage;
 	

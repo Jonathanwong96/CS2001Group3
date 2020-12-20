@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.backend.service.EmailService;
 import com.group3.backend.ui.model.request.EmailRequest;
+import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
 import com.group3.backend.ui.model.response.EmailResponse;
+import com.group3.backend.ui.model.response.EmailStatusResponse;
 
 @RestController //So we can use GET, POST, PUT methods
 @RequestMapping("email") //to define the URL. oursite.com/email
@@ -32,13 +34,18 @@ public class EmailController {
     	return emailService.sendEmail(emailRequest);
     }
     
-    @GetMapping(path="/accept")
-    public EmailResponse acceptMedicationRequest(@RequestParam String id) {
-        return emailService.acceptMedicationRequest(id);
+    @PostMapping(path="/accept")
+    public EmailResponse acceptMedicationRequest(@RequestBody MedicationOrderStatusRequest medOrderStatusRequest) {
+        return emailService.acceptMedicationRequest(medOrderStatusRequest);
     }
     
-    @GetMapping(path="/reject")
-    public EmailResponse rejectMedicationRequest(@RequestParam String id) {
-        return emailService.rejectMedicationRequest(id);
+    @PostMapping(path="/reject")
+    public EmailResponse rejectMedicationRequest(@RequestBody MedicationOrderStatusRequest medOrderStatusRequest) {
+        return emailService.rejectMedicationRequest(medOrderStatusRequest);
+    }
+    
+    @GetMapping(path="/details")
+    public EmailStatusResponse rejectMedicationRequest(@RequestParam String id) {
+        return emailService.getMedicationRequestDetails(id);
     }
 }

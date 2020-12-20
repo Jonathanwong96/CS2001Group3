@@ -7,6 +7,8 @@ import com.group3.backend.service.helper.EmailTemplate;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
+import com.group3.backend.ui.model.response.EmailStatusResponse;
+import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,11 +48,18 @@ public class EmailServiceImpl implements EmailService {
     	return toReturn;
     }
     
-    public EmailResponse acceptMedicationRequest(String id) {
-    	EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+    public EmailResponse acceptMedicationRequest(MedicationOrderStatusRequest medOrderStatusRequest) {
+    	EmailEntity emailEntity = emailRepository.findByNonGuessableId(medOrderStatusRequest.getRequestId());
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
 			emailEntity.setStatus("accepted");
+		    Date readyDate;
+			try {
+				readyDate = new SimpleDateFormat("yyyy-MM-dd").parse(medOrderStatusRequest.getReadyDate());
+				emailEntity.setDateMedicationToBeReady(readyDate);
+			} catch (ParseException e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.BAD_DATE_FORMAT.getErrorMessage());
+			}  
 			emailEntity.setDateUpdatedByPharmacy(new Date());
 			emailRepository.save(emailEntity);
 			EmailResponse toReturn = new EmailResponse();
@@ -58,12 +68,13 @@ public class EmailServiceImpl implements EmailService {
     	}
     }
     
-    public EmailResponse rejectMedicationRequest(String id) {
-    	EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+    public EmailResponse rejectMedicationRequest(MedicationOrderStatusRequest medOrderStatusRequest) {
+    	EmailEntity emailEntity = emailRepository.findByNonGuessableId(medOrderStatusRequest.getRequestId());
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
     		emailEntity.setStatus("rejected");
     		emailEntity.setDateUpdatedByPharmacy(new Date());
+    		emailEntity.setPharmacyComment(medOrderStatusRequest.getComment());
     		emailRepository.save(emailEntity);
     		EmailResponse toReturn = new EmailResponse();
     		BeanUtils.copyProperties(emailEntity, toReturn);
@@ -71,7 +82,17 @@ public class EmailServiceImpl implements EmailService {
     	}
     }
 
-    public EmailResponse sendEmail(EmailRequest emailRequest) {
+	public EmailStatusResponse getMedicationRequestDetails(String nonGuessableId) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(nonGuessableId);
+		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+    	else {
+    		EmailStatusResponse medResponse = new EmailStatusResponse();
+    		BeanUtils.copyProperties(emailEntity, medResponse);
+    		return medResponse;
+    	}
+	}
+
+	public EmailResponse sendEmail(EmailRequest emailRequest) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         
         String nonGuessableId = generateRandomString();
