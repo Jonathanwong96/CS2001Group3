@@ -9,8 +9,8 @@ import com.group3.backend.ui.model.request.EmailRequest;
 
 @Component
 public class EmailTemplate {
-    @Value("${api.url}")
-    private String apiUrl;
+    @Value("${frontEnd.url}")
+    private String frontEndUrl;
 	
 	private final String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" + 
 			"<!-- saved from url=(0098)file:///C:/Users/whata/AppData/Local/Temp/Temp1_beefree-k9b5psb3ttg-2.zip/beefree-k9b5psb3ttg.html -->\n" + 
@@ -210,7 +210,7 @@ public class EmailTemplate {
 			"</div>\n" + 
 			"<div align=\"center\" class=\"button-container\" style=\"padding-top:10px;padding-right:10px;padding-bottom:30px;padding-left:10px;\">\n" + 
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;\"><tr><td style=\"padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px\" align=\"center\"><v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"\" style=\"height:28.5pt; width:179.25pt; v-text-anchor:middle;\" arcsize=\"11%\" strokeweight=\"1.5pt\" strokecolor=\"#000000\" fillcolor=\"#efb700\"><w:anchorlock/><v:textbox inset=\"0,0,0,0\"><center style=\"color:#ffffff; font-family:Arial, sans-serif; font-size:16px\"><![endif]-->\n" + 
-			"<a href=\"[href_reject]\" style=\"cursor:pointer;text-decoration:none;display:inline-block;color:#ffffff;background-color:#6E6E6D;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:47px;padding-right:47px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 24px;color: #FAD0C9\">Inquiry needed</span></span></a>\n" + 
+			"<a href=\"[href_inquiry]\" style=\"cursor:pointer;text-decoration:none;display:inline-block;color:#ffffff;background-color:#6E6E6D;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:47px;padding-right:47px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 24px;color: #FAD0C9\">Inquiry needed</span></span></a>\n" + 
 			"<!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->\n" + 
 			"</div>\n" + 
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"divider\" role=\"presentation\" style=\"table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;\" valign=\"top\" width=\"100%\">\n" + 
@@ -266,8 +266,8 @@ public class EmailTemplate {
     	template = template.replace("[resident]", emailRequest.getResidentName());
     	template = template.replace("[users_name]", emailRequest.getUsersName());
     	template = template.replace("[care_home_name]", emailRequest.getCareHomeName());
-    	template = template.replace("[href_accept]", apiUrl + "/email/accept?id=" + nonGuessableId); //http://localhost:8080/email/accept?id=vb4nqCj3VUCpA7Xr7Mvo
-    	template = template.replace("[href_reject]", apiUrl + "/email/reject?id=" + nonGuessableId);
+    	template = template.replace("[href_accept]", frontEndUrl + "/email/confirmation?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
+    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/inquiry?" + nonGuessableId);
     	    	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);

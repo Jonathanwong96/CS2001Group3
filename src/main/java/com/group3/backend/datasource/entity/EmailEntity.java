@@ -29,6 +29,8 @@ public class EmailEntity implements Serializable {
     private String usersName;
     private Date dateSent;
     private Date dateUpdatedByPharmacy;
+    private String pharmacyComment;
+    private Date dateMedicationToBeReady;
     
 	public long getId() {
 		return id;
@@ -101,6 +103,18 @@ public class EmailEntity implements Serializable {
 	}
 	public void setDateUpdatedByPharmacy(Date dateUpdatedByPharmacy) {
 		this.dateUpdatedByPharmacy = dateUpdatedByPharmacy;
+	}
+	public String getPharmacyComment() {
+		return pharmacyComment;
+	}
+	public void setPharmacyComment(String pharmacyComment) {
+		this.pharmacyComment = pharmacyComment;
+	}
+	public Date getDateMedicationToBeReady() {
+		return dateMedicationToBeReady;
+	}
+	public void setDateMedicationToBeReady(Date dateMedicationToBeReady) {
+		this.dateMedicationToBeReady = dateMedicationToBeReady;
 	}
 	
     
