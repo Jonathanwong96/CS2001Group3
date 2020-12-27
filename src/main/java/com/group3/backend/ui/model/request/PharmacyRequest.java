@@ -8,7 +8,6 @@ public class PharmacyRequest {
     private String address;
     private String phoneNumb;
     private Long careHomeId;
-    private boolean isDefault;
     private String name;
 
     public Long getCareHomeId() {
@@ -17,14 +16,6 @@ public class PharmacyRequest {
 
     public void setCareHomeId(Long careHomeId) {
         this.careHomeId = careHomeId;
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
     }
 
     public String getName() {
