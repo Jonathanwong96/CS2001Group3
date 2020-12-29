@@ -12,7 +12,12 @@ import javax.persistence.Id;
 
 @Entity(name="email")
 public class EmailEntity implements Serializable {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 712443853674416421L;
+
+	@Id
     @GeneratedValue
     private long id;
  
