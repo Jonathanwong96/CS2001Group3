@@ -5,8 +5,8 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class EmailRequest {
-	private String usersEmail;
-	private String usersName;
+	private String careHomeEmail;
+	private String careWorkerName;
 	private String careHomeName;
 	private String pharmacyEmail;
 	private String medicationName;
@@ -14,17 +14,17 @@ public class EmailRequest {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
 	private Date cycleEndDate;
 	
-	public String getUsersEmail() {
-		return usersEmail;
+	public String getCareHomeEmail() {
+		return careHomeEmail;
 	}
-	public void setUsersEmail(String usersEmail) {
-		this.usersEmail = usersEmail;
+	public void setCareHomeEmail(String usersEmail) {
+		this.careHomeEmail = usersEmail;
 	}
-	public String getUsersName() {
-		return usersName;
+	public String getCareWorkerName() {
+		return careWorkerName;
 	}
-	public void setUsersName(String usersName) {
-		this.usersName = usersName;
+	public void setCareWorkerName(String usersName) {
+		this.careWorkerName = usersName;
 	}
 	public String getCareHomeName() {
 		return careHomeName;
