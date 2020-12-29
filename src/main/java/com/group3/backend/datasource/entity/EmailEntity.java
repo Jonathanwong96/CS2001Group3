@@ -12,7 +12,12 @@ import javax.persistence.Id;
 
 @Entity(name="email")
 public class EmailEntity implements Serializable {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 712443853674416421L;
+
+	@Id
     @GeneratedValue
     private long id;
  
@@ -26,7 +31,7 @@ public class EmailEntity implements Serializable {
     private String pharmacyEmail;
     private String pharmacyName;
     private String residentName;
-    private String usersName;
+    private String careWorkerName;
     private Date dateSent;
     private Date dateUpdatedByPharmacy;
     private String pharmacyComment;
@@ -86,11 +91,11 @@ public class EmailEntity implements Serializable {
 	public void setResidentName(String residentName) {
 		this.residentName = residentName;
 	}
-	public String getUsersName() {
-		return usersName;
+	public String getCareWorkerName() {
+		return careWorkerName;
 	}
-	public void setUsersName(String usersName) {
-		this.usersName = usersName;
+	public void setCareWorkerName(String usersName) {
+		this.careWorkerName = usersName;
 	}
 	public Date getDateSent() {
 		return dateSent;

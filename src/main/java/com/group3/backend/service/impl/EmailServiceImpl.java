@@ -101,16 +101,16 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject("New medication request from " + emailRequest.getCareHomeName());
             mimeMessageHelper.setFrom("carehomehelper@gmail.com");
-            mimeMessageHelper.setReplyTo(emailRequest.getUsersEmail()); //may need to change this later so that the email replies to the default care home email.
+            mimeMessageHelper.setReplyTo(emailRequest.getCareHomeEmail());
             mimeMessageHelper.setTo(emailRequest.getPharmacyEmail());
             mimeMessageHelper.setText(emailTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId), true); //true here to indicate sending html message
-            mailSender.send(mimeMessageHelper.getMimeMessage());
+//            mailSender.send(mimeMessageHelper.getMimeMessage());
             
             EmailEntity emailEntity = new EmailEntity();
             BeanUtils.copyProperties(emailRequest, emailEntity);
             emailEntity.setNonGuessableId(nonGuessableId);
             emailEntity.setDateSent(new Date());
-            emailEntity.setReplyToAddr(emailRequest.getUsersEmail());
+            emailEntity.setReplyToAddr(emailRequest.getCareHomeEmail());
             
             EmailEntity savedEmail = emailRepository.save(emailEntity);
             EmailResponse toReturn = new EmailResponse();
