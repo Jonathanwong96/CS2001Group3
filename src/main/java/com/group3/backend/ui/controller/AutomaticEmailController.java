@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group3.backend.service.AutomaticEmailService;
 import com.group3.backend.ui.model.request.AutomaticEmailRequest;
 import com.group3.backend.ui.model.response.AutomaticEmailResponse;
+import com.group3.backend.ui.model.response.EmailResponse;
 
 
 @RestController
@@ -38,6 +39,11 @@ public class AutomaticEmailController {
     public AutomaticEmailResponse createAutomaticEmail(@RequestBody AutomaticEmailRequest autoEmailRequest) {
     	//for now just sending the emailRequest with all fields. Once logins are introduced can reduce the fields that emailRequest accepts and get them from the user jwt.
     	return automaticEmailService.createAutomaticEmail(autoEmailRequest);
+    }
+    
+    @GetMapping(path="new-medication-requests")
+    public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
+    	return automaticEmailService.sendEmailsForAllNewAlerts();
     }
 	
 }
