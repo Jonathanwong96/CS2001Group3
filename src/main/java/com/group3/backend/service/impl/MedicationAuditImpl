@@ -17,16 +17,32 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    MedicationAuditRepository medicationAuditRepository;
 
 	    @Override
+	    public List<MedicationAuditEntity> findAll(long Id){
+
+	    	return (List<MedicationAuditEntity>) medicationAuditRepository.findAll();
+	    }
+
+	    @Override
 	    public MedicationAuditResponse createAudit(MedicationAuditRequest medicationAuditRequest) {
 
 	    	MedicationAuditResponse toReturn = new MedicationAuditResponse();
 	    	MedicationAuditEntity auditEntity = new MedicationAuditEntity();
-	        BeanUtils.copyProperties(medicationAuditRequest, auditEntity);
+	        BeanUtils.copyProperties(medicationAuditRequest, auditEntity); //copy from request to the new instance created
 	        MedicationAuditEntity savedAudit = medicationAuditRepository.save(auditEntity);
 	        BeanUtils.copyProperties(savedAudit, toReturn);
 
 	        return toReturn;
 	    }
+
+		@Override
+		public MedicationAuditResponse updateAudit(MedicationAuditRequest medicationAuditRequest) {
+
+			// 	MedicationAuditRepository
+			 	MedicationAuditResponse toReturn = new MedicationAuditResponse();
+	            BeanUtils.copyProperties(updateAudit(medicationAuditRequest), toReturn);
+	            return toReturn;
+
+		}
 
 
 }

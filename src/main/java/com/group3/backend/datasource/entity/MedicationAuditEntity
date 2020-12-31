@@ -33,6 +33,18 @@ public class MedicationAuditEntity implements Serializable  {
     private long staffId;
 
 
+    public MedicationAuditEntity() {
+
+    }
+
+    public MedicationAuditEntity(String name, Integer dayCount, Integer eveningCount, Integer initialMedicationCount) {
+    	this.name = name;
+    	this.dayCount = dayCount;
+    	this.eveningCount = eveningCount;
+    	this.initialMedicationCount = initialMedicationCount;
+    }
+
+
     //Id
     public long getId() {
     	return id;
