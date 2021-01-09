@@ -3,7 +3,7 @@ package com.group3.backend.service.impl;
 import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.datasource.repos.EmailRepository;
 import com.group3.backend.service.EmailService;
-import com.group3.backend.service.helper.EmailTemplate;
+import com.group3.backend.service.helper.EmailRequestTemplate;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
@@ -21,7 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.mail.internet.MimeMessage;
@@ -32,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender mailSender;
     
     @Autowired
-    private EmailTemplate emailTemplate;
+    private EmailRequestTemplate emailRequestTemplate;
     
     @Autowired
     private EmailRepository emailRepository;
@@ -103,7 +106,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setFrom("carehomehelper@gmail.com");
             mimeMessageHelper.setReplyTo(emailRequest.getCareHomeEmail());
             mimeMessageHelper.setTo(emailRequest.getPharmacyEmail());
-            mimeMessageHelper.setText(emailTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId), true); //true here to indicate sending html message
+            mimeMessageHelper.setText(emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId), true); //true here to indicate sending html message
 //            mailSender.send(mimeMessageHelper.getMimeMessage());
             
             EmailEntity emailEntity = new EmailEntity();
@@ -133,6 +136,26 @@ public class EmailServiceImpl implements EmailService {
     	}
     	return toReturn;
     }
+
+    //NOTE: function only gets out the emails due on this day. Should be expanded to also get out emails that haven't been responded to.
+	public ArrayList<EmailEntity> getMedicationsReadyInXDays(int days) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.add(Calendar.DAY_OF_YEAR, days);
+		Date desiredDate = cal.getTime();
+		
+		ArrayList<EmailEntity> medicationsForCollectionOnDay = emailRepository.findAllByDateMedicationToBeReady(desiredDate);
+		for (EmailEntity medEmail: medicationsForCollectionOnDay) {
+			EmailRequest emailReq = new EmailRequest();
+			BeanUtils.copyProperties(medEmail, emailReq);
+			sendEmail(emailReq);
+		}
+		return medicationsForCollectionOnDay;
+	}
 }
 
 

@@ -11,5 +11,5 @@ public interface AutomaticEmailService {
 	AutomaticEmailResponse updateAutomaticEmail(AutomaticEmailRequest autoEmailRequest);
 	AutomaticEmailResponse createAutomaticEmail(AutomaticEmailRequest autoEmailRequest);
 	AutomaticEmailResponse getUsesAutomaticEmail(long careHomeId);
-	ArrayList<EmailResponse> sendEmailsForAllNewAlerts();	
+	ArrayList<EmailResponse> sendEmailsForAllNewAlerts();
 }

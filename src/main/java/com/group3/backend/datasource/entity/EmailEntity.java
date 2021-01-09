@@ -36,6 +36,7 @@ public class EmailEntity implements Serializable {
     private Date dateUpdatedByPharmacy;
     private String pharmacyComment;
     private Date dateMedicationToBeReady;
+    private boolean readyDateIsConfirmed;
     
 	public long getId() {
 		return id;
@@ -120,6 +121,12 @@ public class EmailEntity implements Serializable {
 	}
 	public void setDateMedicationToBeReady(Date dateMedicationToBeReady) {
 		this.dateMedicationToBeReady = dateMedicationToBeReady;
+	}
+	public boolean isReadyDateIsConfirmed() {
+		return readyDateIsConfirmed;
+	}
+	public void setReadyDateIsConfirmed(boolean readyDateIsConfirmed) {
+		this.readyDateIsConfirmed = readyDateIsConfirmed;
 	}
 	
     
