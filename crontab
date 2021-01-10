@@ -1,0 +1,2 @@
+//PB-135 'As a care home worker, I'd like to have an option for the app to automatically send emails for me'
+*/5 * * * * curl localhost:8080/send-emails-for-alerts

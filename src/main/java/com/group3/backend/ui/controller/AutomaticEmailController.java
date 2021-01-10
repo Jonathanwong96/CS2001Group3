@@ -41,7 +41,7 @@ public class AutomaticEmailController {
     	return automaticEmailService.createAutomaticEmail(autoEmailRequest);
     }
     
-    @GetMapping(path="new-medication-requests")
+    @GetMapping(path="send-emails-for-alerts")
     public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
     	return automaticEmailService.sendEmailsForAllNewAlerts();
     }
