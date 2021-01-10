@@ -3,7 +3,9 @@ package com.group3.backend.service.impl;
 import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.datasource.repos.EmailRepository;
 import com.group3.backend.service.EmailService;
-import com.group3.backend.service.helper.EmailTemplate;
+import com.group3.backend.service.helper.DateHelper;
+import com.group3.backend.service.helper.EmailMedicationReadyTemplate;
+import com.group3.backend.service.helper.EmailRequestTemplate;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
@@ -21,7 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.mail.internet.MimeMessage;
@@ -32,7 +37,10 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender mailSender;
     
     @Autowired
-    private EmailTemplate emailTemplate;
+    private EmailRequestTemplate emailRequestTemplate;
+    
+    @Autowired
+    private EmailMedicationReadyTemplate emailMedicationReadyTemplate;
     
     @Autowired
     private EmailRepository emailRepository;
@@ -91,22 +99,33 @@ public class EmailServiceImpl implements EmailService {
     		return medResponse;
     	}
 	}
+	
+	public boolean sendEmail(String emailToSend, String subject, String careHomeEmail, String pharmacyEmail) {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		 try {
+	        	MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+	            mimeMessageHelper.setSubject(subject);
+	            mimeMessageHelper.setFrom("carehomehelper@gmail.com");
+	            mimeMessageHelper.setReplyTo(careHomeEmail);
+	            mimeMessageHelper.setTo(pharmacyEmail);
+	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
+//	            mailSender.send(mimeMessageHelper.getMimeMessage());
+	            return true;
+		 } catch (Exception e) {
+			 return false;
+		 }
+	}
 
-	public EmailResponse sendEmail(EmailRequest emailRequest) {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        
+	public EmailResponse sendMedicationRequestEmail(EmailRequest emailRequest) {
         String nonGuessableId = generateRandomString();
-
-        try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setSubject("New medication request from " + emailRequest.getCareHomeName());
-            mimeMessageHelper.setFrom("carehomehelper@gmail.com");
-            mimeMessageHelper.setReplyTo(emailRequest.getUsersEmail()); //may need to change this later so that the email replies to the default care home email.
-            mimeMessageHelper.setTo(emailRequest.getPharmacyEmail());
-            mimeMessageHelper.setText(emailTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId), true); //true here to indicate sending html message
-            mailSender.send(mimeMessageHelper.getMimeMessage());
-            
-            EmailEntity emailEntity = new EmailEntity();
+        String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);
+        String subject = "New medication request from " + emailRequest.getCareHomeName();
+        String careHomeEmail = emailRequest.getUsersEmail();
+        String pharmacyEmail = emailRequest.getPharmacyEmail();
+        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
+        
+        if (hasSent) {
+        	EmailEntity emailEntity = new EmailEntity();
             BeanUtils.copyProperties(emailRequest, emailEntity);
             emailEntity.setNonGuessableId(nonGuessableId);
             emailEntity.setDateSent(new Date());
@@ -116,13 +135,39 @@ public class EmailServiceImpl implements EmailService {
             EmailResponse toReturn = new EmailResponse();
             BeanUtils.copyProperties(savedEmail, toReturn);
             return toReturn;
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new EmailResponse(); //TODO need to throw an error or customise the return type here
+        } else {
+        	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.UNABLE_TO_SEND_EMAIL.getErrorMessage());
         }
     }
-    
+
+
+	public ArrayList<EmailResponse> sendAskIfReadyEmails(int daysAhead) {
+		Date beforeDate = DateHelper.getMidnightXDaysInAdvance(daysAhead+1);
+		
+		ArrayList<EmailResponse> allSentMails = new ArrayList<>();
+		
+		ArrayList<EmailEntity> medicationsReadyBeforeDay = emailRepository.findAllUncollectedBy(beforeDate);
+		for (EmailEntity medEmail: medicationsReadyBeforeDay) {
+			//TODO: change this to be the EmailMedicationReadyTemplate
+			//TODO: refactor sendEmail func to just take in a MIME message.
+	        String emailToSend = emailMedicationReadyTemplate.getSubstitutedTemplate(medEmail);
+	        String subject = "Is " + medEmail.getMedicationName() + " ready to collect?";
+	        String careHomeEmail = medEmail.getCareHomeEmail();
+	        String pharmacyEmail = medEmail.getPharmacyEmail();
+	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
+	        
+	        if (hasSent) {
+	        	medEmail.setStatus("Asked if medication is ready to collect");
+	        	emailRepository.save(medEmail); //inefficient to save while in a loop. can later refactor out using saveAll() method if needed
+	        	EmailResponse emailResp = new EmailResponse();
+				BeanUtils.copyProperties(medEmail, emailResp);
+				allSentMails.add(emailResp);
+	        }
+		}
+		return allSentMails;
+	}
+	
+	    
     //62 different options for 20 chars. probability of guessing a route is (1 / (20^62)) - small enough to be negligible.
     private String generateRandomString() {
     	String validChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

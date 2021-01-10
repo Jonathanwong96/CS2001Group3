@@ -12,7 +12,9 @@ import javax.persistence.Id;
 
 @Entity(name="email")
 public class EmailEntity implements Serializable {
-    @Id
+	private static final long serialVersionUID = 3991032399210763160L;
+
+	@Id
     @GeneratedValue
     private long id;
  
@@ -22,6 +24,7 @@ public class EmailEntity implements Serializable {
     private String status = "unresponded";
     private String replyToAddr;
     private String careHomeName;
+    private String careHomeEmail;
     @Column(nullable=false)
     private String pharmacyEmail;
     private String pharmacyName;
@@ -31,6 +34,7 @@ public class EmailEntity implements Serializable {
     private Date dateUpdatedByPharmacy;
     private String pharmacyComment;
     private Date dateMedicationToBeReady;
+    private boolean isCollected = false;
     
 	public long getId() {
 		return id;
@@ -115,6 +119,18 @@ public class EmailEntity implements Serializable {
 	}
 	public void setDateMedicationToBeReady(Date dateMedicationToBeReady) {
 		this.dateMedicationToBeReady = dateMedicationToBeReady;
+	}
+	public boolean isCollected() {
+		return isCollected;
+	}
+	public void setCollected(boolean isCollected) {
+		this.isCollected = isCollected;
+	}
+	public String getCareHomeEmail() {
+		return careHomeEmail;
+	}
+	public void setCareHomeEmail(String careHomeEmail) {
+		this.careHomeEmail = careHomeEmail;
 	}
 	
     

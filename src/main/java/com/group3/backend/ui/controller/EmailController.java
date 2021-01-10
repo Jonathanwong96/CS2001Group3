@@ -31,7 +31,7 @@ public class EmailController {
     @PostMapping
     public EmailResponse sendEmail(@RequestBody EmailRequest emailRequest) {
     	//for now just sending the emailRequest with all fields. Once logins are introduced can reduce the fields that emailRequest accepts and get them from the user jwt.
-    	return emailService.sendEmail(emailRequest);
+    	return emailService.sendMedicationRequestEmail(emailRequest);
     }
     
     @PostMapping(path="/accept")
@@ -44,8 +44,12 @@ public class EmailController {
         return emailService.rejectMedicationRequest(medOrderStatusRequest);
     }
     
-    @GetMapping(path="/details")
-    public EmailStatusResponse rejectMedicationRequest(@RequestParam String id) {
-        return emailService.getMedicationRequestDetails(id);
+    @GetMapping(path="/ask-if-ready")
+    public ArrayList<EmailResponse> sendAskIfReadyEmails() {
+    	return emailService.sendAskIfReadyEmails(1);    	
     }
 }
+
+
+
+
