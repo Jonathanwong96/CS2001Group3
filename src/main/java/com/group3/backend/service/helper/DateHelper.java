@@ -1,17 +1,15 @@
 package com.group3.backend.service.helper;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
 	public static Date getMidnightXDaysInAdvance(int daysInAdvance) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.set(Calendar.HOUR, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		cal.add(Calendar.DAY_OF_YEAR, daysInAdvance);
-		return cal.getTime();
+		LocalDate lDate = LocalDate.now();
+		lDate = lDate.plusDays(daysInAdvance);
+		return Date.from(lDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 }

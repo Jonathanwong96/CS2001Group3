@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.group3.backend.datasource.entity.EmailEntity;
 
-
 @Repository
 public interface EmailRepository extends CrudRepository<EmailEntity, Long> {
 	EmailEntity findByNonGuessableId(String nonGuessableId);

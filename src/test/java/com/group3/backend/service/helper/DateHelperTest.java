@@ -17,13 +17,12 @@ public class DateHelperTest {
 	@Test
 	void canGetMidnightToday() {
 		Date midnightToday = DateHelper.getMidnightXDaysInAdvance(0);
-		Date now = new Date();
-
 		String midnightString = sdf.format(midnightToday);
+		Date now = new Date();
 		String nowString = sdf.format(now);
 		
-		assertEquals(nowString.split(" ")[0], midnightString.split(" ")[0]);
-		assertEquals(nowString.split(" ")[1], "00:00:00");
+		assertEquals(nowString.split(" ")[0], midnightString.split(" ")[0]); //day is the same
+		assertEquals("00:00:00", midnightString.split(" ")[1]); //time is the same
 	}
 	
 	@Test
@@ -40,13 +39,13 @@ public class DateHelperTest {
 		String datePart = futureDateString.split(" ")[0];
 		String timePart = futureDateString.split(" ")[1];
 		
-		assertEquals(calendar.get(Calendar.YEAR), datePart.split("-")[0]);
-		assertEquals(calendar.get(Calendar.MONTH), datePart.split("-")[1]);
-		assertEquals(calendar.get(Calendar.DATE), datePart.split("-")[2]);
+		assertEquals(calendar.get(Calendar.YEAR), Integer.parseInt(datePart.split("-")[0]));
+		assertEquals(calendar.get(Calendar.MONTH)+1, Integer.parseInt(datePart.split("-")[1]));
+		assertEquals(calendar.get(Calendar.DATE), Integer.parseInt(datePart.split("-")[2]));
 		
-		assertEquals(calendar.get(Calendar.HOUR), timePart.split(":")[0]);
-		assertEquals(calendar.get(Calendar.MINUTE), timePart.split(":")[1]);
-		assertEquals(calendar.get(Calendar.SECOND), timePart.split(":")[2]);
+		assertEquals(0, Integer.parseInt(timePart.split(":")[0]));
+		assertEquals(0, Integer.parseInt(timePart.split(":")[1]));
+		assertEquals(0, Integer.parseInt(timePart.split(":")[2]));
 	}
 	
 	@Test
@@ -63,13 +62,13 @@ public class DateHelperTest {
 		String datePart = futureDateString.split(" ")[0];
 		String timePart = futureDateString.split(" ")[1];
 		
-		assertEquals(calendar.get(Calendar.YEAR), datePart.split("-")[0]);
-		assertEquals(calendar.get(Calendar.MONTH), datePart.split("-")[1]);
-		assertEquals(calendar.get(Calendar.DATE), datePart.split("-")[2]);
+		assertEquals(calendar.get(Calendar.YEAR), Integer.parseInt(datePart.split("-")[0]));
+		assertEquals(calendar.get(Calendar.MONTH)+1, Integer.parseInt(datePart.split("-")[1]));
+		assertEquals(calendar.get(Calendar.DATE), Integer.parseInt(datePart.split("-")[2]));
 		
-		assertEquals(calendar.get(Calendar.HOUR), timePart.split(":")[0]);
-		assertEquals(calendar.get(Calendar.MINUTE), timePart.split(":")[1]);
-		assertEquals(calendar.get(Calendar.SECOND), timePart.split(":")[2]);
+		assertEquals(0, Integer.parseInt(timePart.split(":")[0]));
+		assertEquals(0, Integer.parseInt(timePart.split(":")[1]));
+		assertEquals(0, Integer.parseInt(timePart.split(":")[2]));
 	}
 
 }
