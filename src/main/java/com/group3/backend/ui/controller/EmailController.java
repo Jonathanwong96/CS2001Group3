@@ -48,6 +48,11 @@ public class EmailController {
     public ArrayList<EmailResponse> sendAskIfReadyEmails() {
     	return emailService.sendAskIfReadyEmails(1);    	
     }
+    
+    @PostMapping(path="/ready-for-collection")
+    public EmailResponse medicationisReady(@RequestBody MedicationOrderStatusRequest medOrderStatusRequest) {
+        return emailService.medicationIsReady(medOrderStatusRequest);
+    }
 }
 
 

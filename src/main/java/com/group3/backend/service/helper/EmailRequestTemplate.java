@@ -262,12 +262,13 @@ public class EmailRequestTemplate {
 	
 	public String getSubstitutedTemplate(EmailRequest emailRequest, String nonGuessableId) {
     	String template = this.getTemplate();
-    	template = template.replace("[users_email]", emailRequest.getUsersEmail());
+    	template = template.replace("[users_email]", emailRequest.getCareHomeEmail());
     	template = template.replace("[medication]", "\'" + emailRequest.getMedicationName() + "\'");
     	template = template.replace("[resident]", emailRequest.getResidentName());
     	template = template.replace("[users_name]", emailRequest.getUsersName());
-    	template = template.replace("[href_accept]", frontEndUrl + "/email/is-ready?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
-    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/more-time-needed?" + nonGuessableId);
+    	template = template.replace("[care_home_name]", emailRequest.getCareHomeName());
+    	template = template.replace("[href_accept]", frontEndUrl + "/email/set-date?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
+    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/inquiry?" + nonGuessableId);
     	    	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);

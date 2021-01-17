@@ -6,6 +6,7 @@ import com.group3.backend.service.EmailService;
 import com.group3.backend.service.helper.DateHelper;
 import com.group3.backend.service.helper.EmailMedicationReadyTemplate;
 import com.group3.backend.service.helper.EmailRequestTemplate;
+import com.group3.backend.service.helper.EmailStatus;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
@@ -60,7 +61,7 @@ public class EmailServiceImpl implements EmailService {
     	EmailEntity emailEntity = emailRepository.findByNonGuessableId(medOrderStatusRequest.getRequestId());
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
-			emailEntity.setStatus("accepted");
+			emailEntity.setStatus(EmailStatus.PROCESSING.getMessage());
 		    Date readyDate;
 			try {
 				readyDate = new SimpleDateFormat("yyyy-MM-dd").parse(medOrderStatusRequest.getReadyDate());
@@ -80,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
     	EmailEntity emailEntity = emailRepository.findByNonGuessableId(medOrderStatusRequest.getRequestId());
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
-    		emailEntity.setStatus("rejected");
+    		emailEntity.setStatus(EmailStatus.INQUIRY.getMessage());
     		emailEntity.setDateUpdatedByPharmacy(new Date());
     		emailEntity.setPharmacyComment(medOrderStatusRequest.getComment());
     		emailRepository.save(emailEntity);
@@ -109,7 +110,7 @@ public class EmailServiceImpl implements EmailService {
 	            mimeMessageHelper.setReplyTo(careHomeEmail);
 	            mimeMessageHelper.setTo(pharmacyEmail);
 	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
-//	            mailSender.send(mimeMessageHelper.getMimeMessage());
+	//            mailSender.send(mimeMessageHelper.getMimeMessage());
 	            return true;
 		 } catch (Exception e) {
 			 return false;
@@ -120,7 +121,7 @@ public class EmailServiceImpl implements EmailService {
         String nonGuessableId = generateRandomString();
         String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);
         String subject = "New medication request from " + emailRequest.getCareHomeName();
-        String careHomeEmail = emailRequest.getUsersEmail();
+        String careHomeEmail = emailRequest.getCareHomeEmail();
         String pharmacyEmail = emailRequest.getPharmacyEmail();
         boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
         
@@ -128,8 +129,10 @@ public class EmailServiceImpl implements EmailService {
         	EmailEntity emailEntity = new EmailEntity();
             BeanUtils.copyProperties(emailRequest, emailEntity);
             emailEntity.setNonGuessableId(nonGuessableId);
-            emailEntity.setDateSent(new Date());
+            emailEntity.setDateLastEmailSent(new Date());
+            emailEntity.setDateRequested(new Date());
             emailEntity.setReplyToAddr(emailRequest.getUsersEmail());
+            emailEntity.setStatus(EmailStatus.SENT_INITIAL_EMAIL.getMessage());
             
             EmailEntity savedEmail = emailRepository.save(emailEntity);
             EmailResponse toReturn = new EmailResponse();
@@ -157,7 +160,8 @@ public class EmailServiceImpl implements EmailService {
 	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
 	        
 	        if (hasSent) {
-	        	medEmail.setStatus("Asked if medication is ready to collect");
+	        	medEmail.setStatus(EmailStatus.ASKED_IF_READY.getMessage());
+	        	medEmail.setDateLastEmailSent(new Date());
 	        	emailRepository.save(medEmail); //inefficient to save while in a loop. can later refactor out using saveAll() method if needed
 	        	EmailResponse emailResp = new EmailResponse();
 				BeanUtils.copyProperties(medEmail, emailResp);
@@ -178,6 +182,20 @@ public class EmailServiceImpl implements EmailService {
     	}
     	return toReturn;
     }
+
+	@Override
+	public EmailResponse medicationIsReady(MedicationOrderStatusRequest medOrderStatusRequest) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(medOrderStatusRequest.getRequestId());
+    	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+    	else {
+			emailEntity.setStatus(EmailStatus.READY.getMessage());
+			emailEntity.setDateUpdatedByPharmacy(new Date());
+			emailRepository.save(emailEntity);
+			EmailResponse toReturn = new EmailResponse();
+			BeanUtils.copyProperties(emailEntity, toReturn);
+			return toReturn;
+    	}
+	}
 }
 
 

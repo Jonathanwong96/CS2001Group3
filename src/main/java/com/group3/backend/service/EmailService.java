@@ -14,6 +14,7 @@ public interface EmailService {
     ArrayList<EmailResponse> sendAskIfReadyEmails(int daysInAdvance);
     EmailResponse acceptMedicationRequest(MedicationOrderStatusRequest medOrderStatusRequest);
     EmailResponse rejectMedicationRequest(MedicationOrderStatusRequest medOrderStatusRequest);
+    EmailResponse medicationIsReady(MedicationOrderStatusRequest medOrderStatusRequest);
     ArrayList<EmailResponse> getAllEmailsForCareHome(String careHomeName);
     EmailStatusResponse getMedicationRequestDetails(String nonGuessableId);
 }
