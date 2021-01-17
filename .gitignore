@@ -1,2 +1,3 @@
 src/main/java/com/group3/backend/ui/security/SecurityConstants.java
-/target
+/target*
+
