@@ -25,25 +25,25 @@ public class MedicationImpl implements MedicationService{
     }
 	
 	@Override
-    public MedicationResponse addMedication(MedicationRequest medicationRequest) {
+    public MedicationResponse createMedication(MedicationRequest medicationRequest) {
     	
     	MedicationResponse toReturn = new MedicationResponse();
-    	MedicationEntity medicationEntity = new MedicationEntity();
-        BeanUtils.copyProperties(medicationRequest, medicationEntity); //copy from request to the new instance created
-        MedicationEntity savedMedication = medicationRepository.save(medicationEntity);
+    	MedicationEntity mediEntity = new MedicationEntity();
+        BeanUtils.copyProperties(medicationRequest, mediEntity); //copy from request to the new instance created
+        MedicationEntity savedMedication = medicationRepository.save(mediEntity);
         BeanUtils.copyProperties(savedMedication, toReturn);
 
         return toReturn;
     }
 	
-//	@Override
-//	public MedicationResponse updateMedication(MedicationRequest medicationRequest) {
-//		
-//		 	MedicationResponse toReturn = new MedicationResponse();
-//            BeanUtils.copyProperties(updateMedication(medicationRequest), toReturn);
-//            return toReturn;
-//    	
-//	}
+	// @Override
+	// public MedicationResponse updateMedication(MedicationRequest medicationRequest) {
+		
+	// 	 	MedicationResponse toReturn = new MedicationResponse();
+    //        BeanUtils.copyProperties(updateMedication(medicationRequest), toReturn);
+    //        return toReturn;
+   	
+	// }
 
 
 }

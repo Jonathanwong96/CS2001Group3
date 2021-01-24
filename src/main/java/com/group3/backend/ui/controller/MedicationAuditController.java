@@ -39,9 +39,9 @@ public class MedicationAuditController {
 		return MedicationAuditService.updateAudit(medicationAuditRequest);
 	}
 
-	@GetMapping(path = "/all")
+	@GetMapping(path = "/viewAll")
 	public List<MedicationAuditEntity> findAll(@RequestParam long Id){
 
-		return MedicationAuditService.findAll(Id);
+		return MedicationAuditService.findAll();
 	}
 	}

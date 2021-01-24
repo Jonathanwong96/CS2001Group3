@@ -9,7 +9,7 @@ import com.group3.backend.ui.model.response.MedicationAuditResponse;
 
 public interface MedicationAuditService {
 
-	List<MedicationAuditEntity> findAll(long Id);
+	List<MedicationAuditEntity> findAll();
 
 	MedicationAuditResponse createAudit(MedicationAuditRequest medicationAudit);
 	MedicationAuditResponse updateAudit(MedicationAuditRequest medicationAudit);

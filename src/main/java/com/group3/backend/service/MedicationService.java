@@ -11,8 +11,8 @@ import com.group3.backend.ui.model.response.MedicationResponse;
 public interface MedicationService {
 	
 	List<MedicationEntity> findAll(long Id);
-	
-	MedicationResponse addMedication(MedicationRequest medication);
-//	MedicationResponse updateMedication(MedicationRequest medication);
+	MedicationResponse createMedication(MedicationRequest medication);
+
+//	MedicationResponse updateMedication(MedicationRequest medicationLog);
 
 }

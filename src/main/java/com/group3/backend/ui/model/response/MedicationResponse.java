@@ -4,7 +4,7 @@ public class MedicationResponse {
 	
 	private Long id;
 	private String medicationName;
-	private Integer prescriptionCount;
+	private int prescriptionCount;
 	private String description;
 	private String dosage;
 	private String pharmacyName;
@@ -24,10 +24,10 @@ public class MedicationResponse {
     	this.medicationName = medicationName;
     }
     
-    public Integer getPrecriptionCount() {
+    public int getPrecriptionCount() {
     	return prescriptionCount;
     }
-    public void setPrescriptionCount(Integer prescriptionCount) {
+    public void setPrescriptionCount(int prescriptionCount) {
     	this.prescriptionCount = prescriptionCount;
     }
   

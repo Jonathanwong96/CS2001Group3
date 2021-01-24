@@ -18,24 +18,18 @@ import com.group3.backend.ui.model.response.MedicationResponse;
 public class MedicationController {
 	
 	@Autowired
-	MedicationImpl MedicationService;
+	MedicationImpl medicationService;
 	
-	@PostMapping(path = "/addMedication") //post mapping instead???
+	@PostMapping(path = "/addMedication") 
 	public MedicationResponse addMedication(@RequestBody MedicationRequest medicationRequest) {
 		
-		return MedicationService.addMedication(medicationRequest);
+		return medicationService.createMedication(medicationRequest);
 	}
-
-//	@PutMapping(path = "/updateMedication") //put mapping instead??
-//	public MedicationResponse updateMedication(@RequestBody MedicationRequest medicationRequest) {
-//		
-//		return MedicationService.updateMedication(medicationRequest);
-//	}
 
 	@GetMapping(path = "/medication")
 	public List<MedicationEntity> findAll(@RequestParam long Id){
 		
-		return MedicationService.findAll(Id);
+		return medicationService.findAll(Id);
 	}
-	
+
 }

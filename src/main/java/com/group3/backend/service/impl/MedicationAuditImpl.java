@@ -19,7 +19,7 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    MedicationAuditRepository medicationAuditRepository;
 
 	    @Override
-	    public List<MedicationAuditEntity> findAll(long Id){
+	    public List<MedicationAuditEntity> findAll(){
 
 	    	return (List<MedicationAuditEntity>) medicationAuditRepository.findAll();
 	    }
