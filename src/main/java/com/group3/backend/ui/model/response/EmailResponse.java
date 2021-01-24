@@ -12,6 +12,8 @@ public class EmailResponse {
     private Date dateUpdatedByPharmacy;
     private Date dateMedicationToBeReady;
     private String pharmacyComment;
+    private String nonGuessableId;
+
 	
 	public String getStatus() {
 		return status;
@@ -66,6 +68,12 @@ public class EmailResponse {
 	}
 	public void setPharmacyComment(String pharmacyComment) {
 		this.pharmacyComment = pharmacyComment;
+	}
+	public String getNonGuessableId() {
+		return nonGuessableId;
+	}
+	public void setNonGuessableId(String nonGuessableId) {
+		this.nonGuessableId = nonGuessableId;
 	}
 	
 	

@@ -8,6 +8,7 @@ import com.group3.backend.service.helper.EmailMedicationReadyTemplate;
 import com.group3.backend.service.helper.EmailRequestTemplate;
 import com.group3.backend.service.helper.EmailStatus;
 import com.group3.backend.ui.model.request.EmailRequest;
+import com.group3.backend.ui.model.response.EmailContentResponse;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.EmailStatusResponse;
@@ -110,20 +111,24 @@ public class EmailServiceImpl implements EmailService {
 	            mimeMessageHelper.setReplyTo(careHomeEmail);
 	            mimeMessageHelper.setTo(pharmacyEmail);
 	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
-	//            mailSender.send(mimeMessageHelper.getMimeMessage());
+//	            mailSender.send(mimeMessageHelper.getMimeMessage());
 	            return true;
 		 } catch (Exception e) {
 			 return false;
 		 }
 	}
-
-	public EmailResponse sendMedicationRequestEmail(EmailRequest emailRequest) {
-        String nonGuessableId = generateRandomString();
-        String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);
+	
+	public boolean sendMedicationRequestEmail(EmailRequest emailRequest, String nonGuessableId) {
+		String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);
         String subject = "New medication request from " + emailRequest.getCareHomeName();
         String careHomeEmail = emailRequest.getCareHomeEmail();
         String pharmacyEmail = emailRequest.getPharmacyEmail();
-        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
+        return sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
+	}
+
+	public EmailResponse saveMedicationRequestEmail(EmailRequest emailRequest) {
+        String nonGuessableId = generateRandomString();
+        boolean hasSent = sendMedicationRequestEmail(emailRequest, nonGuessableId);
         
         if (hasSent) {
         	EmailEntity emailEntity = new EmailEntity();
@@ -145,14 +150,12 @@ public class EmailServiceImpl implements EmailService {
 
 
 	public ArrayList<EmailResponse> sendAskIfReadyEmails(int daysAhead) {
-		Date beforeDate = DateHelper.getMidnightXDaysInAdvance(daysAhead+1);
+		Date beforeDate = DateHelper.getStartOfDayXDaysInAdvance(daysAhead+1);
 		
 		ArrayList<EmailResponse> allSentMails = new ArrayList<>();
 		
 		ArrayList<EmailEntity> medicationsReadyBeforeDay = emailRepository.findAllUncollectedBy(beforeDate);
 		for (EmailEntity medEmail: medicationsReadyBeforeDay) {
-			//TODO: change this to be the EmailMedicationReadyTemplate
-			//TODO: refactor sendEmail func to just take in a MIME message.
 	        String emailToSend = emailMedicationReadyTemplate.getSubstitutedTemplate(medEmail);
 	        String subject = "Is " + medEmail.getMedicationName() + " ready to collect?";
 	        String careHomeEmail = medEmail.getCareHomeEmail();
@@ -195,6 +198,103 @@ public class EmailServiceImpl implements EmailService {
 			BeanUtils.copyProperties(emailEntity, toReturn);
 			return toReturn;
     	}
+	}
+
+	@Override
+	public EmailResponse tryResendEmail(String id) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+		if (canResendEmail(emailEntity)) {
+			EmailRequest emailRequest = new EmailRequest();
+			BeanUtils.copyProperties(emailEntity, emailRequest);
+			emailRequest.setUsersEmail(emailEntity.getCareHomeEmail());
+			boolean hasSent = sendMedicationRequestEmail(emailRequest, emailEntity.getNonGuessableId());
+			
+			if (hasSent) {
+				emailEntity.setDateLastEmailSent(new Date());
+				EmailEntity savedEmail = emailRepository.save(emailEntity);
+				EmailResponse emailResponse = new EmailResponse();
+				BeanUtils.copyProperties(savedEmail, emailResponse);
+				return emailResponse;
+			} else {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.UNABLE_TO_SEND_EMAIL.getErrorMessage());
+			}
+		}
+		return null;
+	}
+	
+	//brought out into it's own method so can be tested if necessary.
+	boolean canResendEmail(EmailEntity emailEntity) {
+		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+		//only allow to resend email when the status is sent initial email
+		//if we've asked if ready and not received a response the email should auto re-send.
+		if (!emailEntity.getStatus().equals(EmailStatus.SENT_INITIAL_EMAIL.getMessage())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.NOT_RIGHT_STEP.getErrorMessage());
+		}
+		//email has to be sent yesterday or earlier to resend
+		Date zeroHourThisMorning = DateHelper.getStartOfDayXDaysInAdvance(0);
+		if (emailEntity.getDateLastEmailSent().before(zeroHourThisMorning)) {
+			return true;
+		} else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.SENDING_TOO_SOON.getErrorMessage());
+		}
+	}
+
+	@Override
+	public EmailContentResponse getLastEmailContent(String id) {
+		//first we need to get which email template to use.
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+		
+		EmailContentResponse toReturn = new EmailContentResponse();
+		toReturn.setNonGuessableId(emailEntity.getNonGuessableId());
+		
+		EmailRequest emailRequest = new EmailRequest();
+		BeanUtils.copyProperties(emailEntity, emailRequest);
+		
+		//show initial email if sent initial email, inquiry, or processing
+		if (emailEntity.getStatus().equals(EmailStatus.SENT_INITIAL_EMAIL.getMessage()) ||
+				emailEntity.getStatus().equals(EmailStatus.PROCESSING.getMessage()) ||
+				emailEntity.getStatus().equals(EmailStatus.INQUIRY.getMessage())) {
+			
+			toReturn.setEmailHtml(emailRequestTemplate.getSubstitutedTemplate(emailRequest, emailEntity.getNonGuessableId(), false));
+		} else {
+			toReturn.setEmailHtml(emailMedicationReadyTemplate.getSubstitutedTemplate(emailEntity, false));
+		}
+		return toReturn;
+	}
+
+	@Override
+	public EmailResponse markCollected(String id) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+		if (!emailEntity.getStatus().equals(EmailStatus.READY.getMessage())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.NOT_RIGHT_STEP.getErrorMessage());
+		}
+		
+		emailEntity.setStatus(EmailStatus.COMPLETED.getMessage());
+		emailEntity.setCollected(true);
+		EmailEntity savedEmailEntity = emailRepository.save(emailEntity);
+		
+		EmailResponse emailResponse = new EmailResponse();
+		BeanUtils.copyProperties(savedEmailEntity, emailResponse);
+		return emailResponse;
+	}
+
+	@Override
+	public EmailResponse undoMarkCollected(String id) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
+		if (!emailEntity.getStatus().equals(EmailStatus.COMPLETED.getMessage())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.NOT_RIGHT_STEP.getErrorMessage());
+		}
+		
+		emailEntity.setStatus(EmailStatus.READY.getMessage());
+		emailEntity.setCollected(false);
+		EmailEntity savedEmailEntity = emailRepository.save(emailEntity);
+		
+		EmailResponse emailResponse = new EmailResponse();
+		BeanUtils.copyProperties(savedEmailEntity, emailResponse);
+		return emailResponse;
 	}
 }
 

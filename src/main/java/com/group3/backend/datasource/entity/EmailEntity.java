@@ -38,6 +38,7 @@ public class EmailEntity implements Serializable {
     private Date dateMedicationToBeReady;
     private String pharmacyComment;
     private boolean isCollected = false;
+    private Date cycleEndDate;
     
 	public long getId() {
 		return id;
@@ -140,6 +141,12 @@ public class EmailEntity implements Serializable {
 	}
 	public void setDateRequested(Date dateRequested) {
 		this.dateRequested = dateRequested;
+	}
+	public Date getCycleEndDate() {
+		return cycleEndDate;
+	}
+	public void setCycleEndDate(Date cycleEndDate) {
+		this.cycleEndDate = cycleEndDate;
 	}
 	
     

@@ -16,7 +16,7 @@ public class DateHelperTest {
 	
 	@Test
 	void canGetMidnightToday() {
-		Date midnightToday = DateHelper.getMidnightXDaysInAdvance(0);
+		Date midnightToday = DateHelper.getStartOfDayXDaysInAdvance(0);
 		String midnightString = sdf.format(midnightToday);
 		Date now = new Date();
 		String nowString = sdf.format(now);
@@ -29,7 +29,7 @@ public class DateHelperTest {
 	void canAddDays() {
 		int daysToAdd = 35;
 		
-		Date futureDate = DateHelper.getMidnightXDaysInAdvance(daysToAdd);
+		Date futureDate = DateHelper.getStartOfDayXDaysInAdvance(daysToAdd);
 		Date now = new Date();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(now);
@@ -52,7 +52,7 @@ public class DateHelperTest {
 	void canSubtractDays() {
 		int daysToAdd= -35;
 		
-		Date futureDate = DateHelper.getMidnightXDaysInAdvance(daysToAdd);
+		Date futureDate = DateHelper.getStartOfDayXDaysInAdvance(daysToAdd);
 		Date now = new Date();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(now);

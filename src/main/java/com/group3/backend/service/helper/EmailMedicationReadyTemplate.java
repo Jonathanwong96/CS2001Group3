@@ -260,15 +260,24 @@ public class EmailMedicationReadyTemplate {
 	}
 	
 	public String getSubstitutedTemplate(EmailEntity emailEntity) {
+		return getSubstitutedTemplate(emailEntity, true);
+	}
+	
+	public String getSubstitutedTemplate(EmailEntity emailEntity, boolean addLinks) {
     	String template = this.getTemplate();
     	template = template.replace("[users_email]", emailEntity.getUsersName());
     	template = template.replace("[medication]", "\'" + emailEntity.getMedicationName() + "\'");
     	template = template.replace("[resident]", emailEntity.getResidentName());
     	template = template.replace("[users_name]", emailEntity.getUsersName());
     	template = template.replace("[care_home_name]", emailEntity.getCareHomeName());
-    	template = template.replace("[href_ready]", frontEndUrl + "/email/ready-to-collect?" + emailEntity.getNonGuessableId()); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
-    	template = template.replace("[href_set-date]", frontEndUrl + "/email/set-date?" + emailEntity.getNonGuessableId());
-    	    	
+    	if (addLinks) {
+	    	template = template.replace("[href_ready]", frontEndUrl + "/email/ready-to-collect?" + emailEntity.getNonGuessableId()); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
+	    	template = template.replace("[href_set-date]", frontEndUrl + "/email/set-date?" + emailEntity.getNonGuessableId());
+    	} else {
+       		template = template.replace("href=\"[href_accept]\"", "");
+    		template = template.replace("href=\"[href_inquiry]\"", "");
+    	}
+    	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
     	template = template.replace("[pharmacy_ready_date]", sdf.format(emailEntity.getDateMedicationToBeReady()));

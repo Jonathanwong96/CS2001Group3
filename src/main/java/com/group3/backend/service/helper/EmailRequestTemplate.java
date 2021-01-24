@@ -261,15 +261,24 @@ public class EmailRequestTemplate {
 	}
 	
 	public String getSubstitutedTemplate(EmailRequest emailRequest, String nonGuessableId) {
+		return getSubstitutedTemplate(emailRequest, nonGuessableId, true);
+	}
+	
+	public String getSubstitutedTemplate(EmailRequest emailRequest, String nonGuessableId, boolean addLinks) {
     	String template = this.getTemplate();
     	template = template.replace("[users_email]", emailRequest.getCareHomeEmail());
     	template = template.replace("[medication]", "\'" + emailRequest.getMedicationName() + "\'");
     	template = template.replace("[resident]", emailRequest.getResidentName());
     	template = template.replace("[users_name]", emailRequest.getUsersName());
     	template = template.replace("[care_home_name]", emailRequest.getCareHomeName());
-    	template = template.replace("[href_accept]", frontEndUrl + "/email/set-date?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
-    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/inquiry?" + nonGuessableId);
-    	    	
+    	if (addLinks) {
+	    	template = template.replace("[href_accept]", frontEndUrl + "/email/set-date?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
+	    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/inquiry?" + nonGuessableId);
+    	} else {
+    		template = template.replace("href=\"[href_accept]\"", "");
+    		template = template.replace("href=\"[href_inquiry]\"", "");
+    	}
+    	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
     	template = template.replace("[date]", sdf.format(emailRequest.getCycleEndDate()));

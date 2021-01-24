@@ -38,16 +38,16 @@ public class EmailRepositoryTest {
 		EmailEntity twoDaysAhead = new EmailEntity();
 		
 		beforeCollected.setCollected(true);
-		beforeCollected.setDateMedicationToBeReady(DateHelper.getMidnightXDaysInAdvance(-2));
+		beforeCollected.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(-2));
 		beforeCollected.setNonGuessableId("1");
 		beforeCollected.setPharmacyEmail("abc@aol.com");
-		before.setDateMedicationToBeReady(DateHelper.getMidnightXDaysInAdvance(-1));
+		before.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(-1));
 		before.setNonGuessableId("2");
 		before.setPharmacyEmail("123@aol.com");
-		dayAhead.setDateMedicationToBeReady(DateHelper.getMidnightXDaysInAdvance(1));
+		dayAhead.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(1));
 		dayAhead.setNonGuessableId("3");
 		dayAhead.setPharmacyEmail("llll@aol.com");
-		twoDaysAhead.setDateMedicationToBeReady(DateHelper.getMidnightXDaysInAdvance(2));
+		twoDaysAhead.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(2));
 		twoDaysAhead.setNonGuessableId("4");
 		twoDaysAhead.setPharmacyEmail("99999@aol.com");
 
@@ -56,7 +56,7 @@ public class EmailRepositoryTest {
 		emailRepository.save(dayAhead);
 		emailRepository.save(twoDaysAhead);
 		
-		Date midnightTwoDaysAhead = DateHelper.getMidnightXDaysInAdvance(2);
+		Date midnightTwoDaysAhead = DateHelper.getStartOfDayXDaysInAdvance(2);
 		ArrayList<EmailEntity> allUncollectedBeforeTwoDaysAhead = emailRepository.findAllUncollectedBy(midnightTwoDaysAhead);
 		
 		assertEquals(2, allUncollectedBeforeTwoDaysAhead.size());

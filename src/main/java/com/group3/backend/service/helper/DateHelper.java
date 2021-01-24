@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
-	public static Date getMidnightXDaysInAdvance(int daysInAdvance) {
+	public static Date getStartOfDayXDaysInAdvance(int daysInAdvance) {
 		LocalDate lDate = LocalDate.now();
 		lDate = lDate.plusDays(daysInAdvance);
 		return Date.from(lDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
