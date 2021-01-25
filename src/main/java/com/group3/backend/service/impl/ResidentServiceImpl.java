@@ -1,6 +1,7 @@
 package com.group3.backend.service.impl;
 
 
+import com.group3.backend.datasource.entity.PharmacyEntity;
 import com.group3.backend.datasource.entity.ResidentEntity;
 
 import com.group3.backend.datasource.repos.ResidentRepository;
@@ -8,8 +9,11 @@ import com.group3.backend.datasource.repos.ResidentRepository;
 import com.group3.backend.service.ResidentService;
 
 import com.group3.backend.ui.model.request.ResidentRequest;
-
+import com.group3.backend.ui.model.response.PharmacyResponse;
 import com.group3.backend.ui.model.response.ResidentResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,7 @@ public class ResidentServiceImpl implements ResidentService {
     public ResidentResponse createResident(ResidentRequest residentRequest) {
     	ResidentResponse toReturn = new ResidentResponse();
         BeanUtils.copyProperties(repoSave(residentRequest), toReturn);
+        toReturn.setOperationMessage("resident added");
         return toReturn;
     }
     
@@ -40,6 +45,18 @@ public class ResidentServiceImpl implements ResidentService {
     		//return user-friendly JSON "Resident by Id not found"
     		return null;
     	}
+    }
+    
+    @Override
+    public ArrayList<ResidentResponse> getAllResidentsForHome(long careHomeId) {
+        ArrayList<ResidentResponse> toReturn = new ArrayList<>();
+        List<ResidentEntity> allResidentsForHome = residentRepository.findAllByCareHomeId(careHomeId);
+        for (ResidentEntity rEntity: allResidentsForHome) {
+        	ResidentResponse rResponse = new ResidentResponse();
+            BeanUtils.copyProperties(rEntity, rResponse);
+            toReturn.add(rResponse);
+        }
+        return toReturn;
     }
     
     /**

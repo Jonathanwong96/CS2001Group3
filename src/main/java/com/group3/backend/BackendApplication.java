@@ -1,6 +1,9 @@
 package com.group3.backend;
 
 import com.group3.backend.service.EmailService;
+
+import java.util.ArrayList;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +16,7 @@ public class BackendApplication {
 
 //		EmailService mailService = (EmailService) aContext.getBean("emailServiceImpl");
 //		mailService.sendMail("pmarshall.dev@gmail.com", "test", "test");
+			
 	}
 
 }
