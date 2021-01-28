@@ -12,8 +12,8 @@ public class MedicationDetailsModel {
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	private String medicationDescription;
-	private Integer dosage;
+	private String description;
+	private String dosage;
 	private Character medicationClass;
 	private String medicationName;
 	private String pharmacyName;
@@ -22,9 +22,9 @@ public class MedicationDetailsModel {
 	public MedicationDetailsModel() {
 		
 	}
-	public MedicationDetailsModel(String medicationDescription, Integer dosage, Character medicationClass,
+	public MedicationDetailsModel(String medicationDescription, String dosage, Character medicationClass,
 			String medicationName, String pharmacyName, Integer prescriptionCount) {
-		this.medicationDescription = medicationDescription;
+		this.description = medicationDescription;
 		this.dosage = dosage;
 		this.medicationClass = medicationClass;
 		this.medicationName = medicationName;
@@ -40,15 +40,15 @@ public class MedicationDetailsModel {
 		this.id = id;
 	}
 	public String getMedicationDescription() {
-		return medicationDescription;
+		return description;
 	}
 	public void setMedicationDescription(String medicationDescription) {
-		this.medicationDescription = medicationDescription;
+		this.description = medicationDescription;
 	}
-	public Integer getDosage() {
+	public String getDosage() {
 		return dosage;
 	}
-	public void setDosage(Integer dosage) {
+	public void setDosage(String dosage) {
 		this.dosage = dosage;
 	}
 	public Character getMedicationClass() {
@@ -76,8 +76,4 @@ public class MedicationDetailsModel {
 		this.prescriptionCount = prescriptionCount;
 	}
 
-	
-	
-	
-	
 }

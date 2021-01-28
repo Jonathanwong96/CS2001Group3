@@ -22,8 +22,6 @@ public class MedicationDetailsController {
 	@GetMapping("/medications")
 	public List<MedicationDetailsModel> getMedication()
 	{
-		MedicationDetailsModel savedModel = medicationDetailsRepo.save(new MedicationDetailsModel("desc", 1, 'B',
-			"name", "pharmacy", 1));
 		return medicationDetailsRepo.findAll();
 	}
 }
