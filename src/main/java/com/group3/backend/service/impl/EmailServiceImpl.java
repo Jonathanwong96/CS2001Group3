@@ -1,7 +1,14 @@
 package com.group3.backend.service.impl;
 
+import com.group3.backend.datasource.entity.CareHomeEntity;
+import com.group3.backend.datasource.entity.AlertEntity;
 import com.group3.backend.datasource.entity.EmailEntity;
+import com.group3.backend.datasource.entity.MedicationForResidentEntity;
+import com.group3.backend.datasource.entity.ResidentEntity;
+import com.group3.backend.datasource.repos.AlertRepository;
+import com.group3.backend.datasource.repos.CareHomeRepository;
 import com.group3.backend.datasource.repos.EmailRepository;
+import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 import com.group3.backend.service.EmailService;
 import com.group3.backend.service.helper.DateHelper;
 import com.group3.backend.service.helper.EmailMedicationReadyTemplate;
@@ -13,6 +20,7 @@ import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.EmailStatusResponse;
 import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
+import com.group3.backend.ui.model.request.NewEmailRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +38,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.mail.internet.MimeMessage;
 
@@ -47,15 +57,41 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private EmailRepository emailRepository;
     
-    public ArrayList<EmailResponse> getAllEmailsForCareHome(String careHomeName) {
-    	ArrayList<EmailEntity> allEmails = emailRepository.findAllByCareHomeName(careHomeName);
-    	ArrayList<EmailResponse> toReturn = new ArrayList<>();
-    	for (EmailEntity eEntity: allEmails) {
-    		EmailResponse eResponse = new EmailResponse();
-    		BeanUtils.copyProperties(eEntity, eResponse);
-    		toReturn.add(eResponse);
+    @Autowired private MedicationForResidentRepository medForResRepository;
+    @Autowired private AlertRepository alertRepository;
+    @Autowired private CareHomeRepository careHomeRepository;
+    
+    //Warning. Could be slow? May need to change to include EAGER fetching, or instead create a custom query.
+    //triple for loop is probably very bad. let's see how it does and refactor later.
+    public ArrayList<EmailResponse> getAllEmailsForCareHome(long careHomeId) {
+    	Optional<CareHomeEntity> resp = careHomeRepository.findById(careHomeId);
+    	if (resp.isEmpty()) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+    	} else {
+    		CareHomeEntity careHome = resp.get();
+    		ArrayList<EmailEntity> allEmails= new ArrayList<>();
+    		ArrayList<ResidentEntity> allResidents = new ArrayList<>(careHome.getResidents());
+    		
+    		for (ResidentEntity res: allResidents) {
+    			List<MedicationForResidentEntity> allMedsForRes = res.getAllMedicationsForResident();
+    			for (MedicationForResidentEntity medForRes: allMedsForRes) {
+    				List<AlertEntity> alertsForRes = medForRes.getAlertsForMedication();
+    				for (AlertEntity alert: alertsForRes) {
+    					if (alert.getEmail() != null) {
+    						allEmails.add(alert.getEmail());
+    					}
+    				}
+    			}
+    		}
+    		
+        	ArrayList<EmailResponse> toReturn = new ArrayList<>();
+        	for (EmailEntity eEntity: allEmails) {
+        		EmailResponse eResponse = new EmailResponse();
+        		BeanUtils.copyProperties(eEntity, eResponse);
+        		toReturn.add(eResponse);
+        	}
+        	return toReturn;
     	}
-    	return toReturn;
     }
     
     public EmailResponse acceptMedicationRequest(MedicationOrderStatusRequest medOrderStatusRequest) {
@@ -66,11 +102,11 @@ public class EmailServiceImpl implements EmailService {
 		    Date readyDate;
 			try {
 				readyDate = new SimpleDateFormat("yyyy-MM-dd").parse(medOrderStatusRequest.getReadyDate());
-				emailEntity.setDateMedicationToBeReady(readyDate);
+				emailEntity.setDatePharmacySaysReady(readyDate);
 			} catch (ParseException e) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.BAD_DATE_FORMAT.getErrorMessage());
 			}  
-			emailEntity.setDateUpdatedByPharmacy(new Date());
+			emailEntity.setRequestLastUpdatedByPharmacy(new Date());
 			emailRepository.save(emailEntity);
 			EmailResponse toReturn = new EmailResponse();
 			BeanUtils.copyProperties(emailEntity, toReturn);
@@ -83,8 +119,8 @@ public class EmailServiceImpl implements EmailService {
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
     		emailEntity.setStatus(EmailStatus.INQUIRY.getMessage());
-    		emailEntity.setDateUpdatedByPharmacy(new Date());
-    		emailEntity.setPharmacyComment(medOrderStatusRequest.getComment());
+    		emailEntity.setRequestLastUpdatedByPharmacy(new Date());
+    		emailEntity.setPharmacyInquiryComment(medOrderStatusRequest.getComment());
     		emailRepository.save(emailEntity);
     		EmailResponse toReturn = new EmailResponse();
     		BeanUtils.copyProperties(emailEntity, toReturn);
@@ -126,26 +162,46 @@ public class EmailServiceImpl implements EmailService {
         return sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
 	}
 
-	public EmailResponse saveMedicationRequestEmail(EmailRequest emailRequest) {
-        String nonGuessableId = generateRandomString();
-        boolean hasSent = sendMedicationRequestEmail(emailRequest, nonGuessableId);
-        
-        if (hasSent) {
-        	EmailEntity emailEntity = new EmailEntity();
-            BeanUtils.copyProperties(emailRequest, emailEntity);
-            emailEntity.setNonGuessableId(nonGuessableId);
-            emailEntity.setDateLastEmailSent(new Date());
-            emailEntity.setDateRequested(new Date());
-            emailEntity.setReplyToAddr(emailRequest.getUsersEmail());
-            emailEntity.setStatus(EmailStatus.SENT_INITIAL_EMAIL.getMessage());
-            
-            EmailEntity savedEmail = emailRepository.save(emailEntity);
-            EmailResponse toReturn = new EmailResponse();
-            BeanUtils.copyProperties(savedEmail, toReturn);
-            return toReturn;
-        } else {
-        	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.UNABLE_TO_SEND_EMAIL.getErrorMessage());
-        }
+	public EmailResponse saveMedicationRequestEmail(long alertId) {
+        //If we don't have an alert Id we can't get the info to send the email.
+		Optional<AlertEntity> record = alertRepository.findById(alertId);
+		if (record.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+		} else {
+			AlertEntity alertEntity = record.get();
+			if (alertEntity.getEmail() != null) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.ALERT_HAS_EMAIL.getErrorMessage());
+			}
+			
+			//now we have no email sent and can go ahead and send this new email.
+			String nonGuessableId = generateRandomString();
+			String careHomeName = alertEntity.getMedForResident().getResident().getCareHome().getName();
+			String subject = "New medication request from " + careHomeName;
+			String careHomeEmail = alertEntity.getMedForResident().getResident().getCareHome().getEmail();
+			String pharmacyEmail = alertEntity.getMedForResident().getPharmacy().getEmail();
+			String medicationName = alertEntity.getMedForResident().getMedication().getName();
+			String residentName = alertEntity.getMedForResident().getResident().getFullName();
+			EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
+			String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);			
+	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
+	        
+	        if (hasSent) {
+	        	EmailEntity emailEntity = new EmailEntity();
+	            emailEntity.setNonGuessableId(nonGuessableId);
+	            emailEntity.setLastEmailSentDate(new Date());
+	            emailEntity.setDateRequested(new Date());
+	            emailEntity.setStatus(EmailStatus.SENT_INITIAL_EMAIL.getMessage());
+	            emailEntity.setAlertCreatedFrom(alertEntity);
+	            emailEntity.setPharmacySentTo(alertEntity.getMedForResident().getPharmacy()); //we include pharmacy here as well so if the default pharmacy for a residents meds changes we still know who this was sent to
+	            
+	            EmailEntity savedEmail = emailRepository.save(emailEntity);
+	            EmailResponse toReturn = new EmailResponse();
+	            BeanUtils.copyProperties(savedEmail, toReturn);
+	            return toReturn;
+	        } else {
+	        	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.UNABLE_TO_SEND_EMAIL.getErrorMessage());
+	        }
+		}
     }
 
 
@@ -154,17 +210,17 @@ public class EmailServiceImpl implements EmailService {
 		
 		ArrayList<EmailResponse> allSentMails = new ArrayList<>();
 		
-		ArrayList<EmailEntity> medicationsReadyBeforeDay = emailRepository.findAllUncollectedBy(beforeDate);
+		ArrayList<EmailEntity> medicationsReadyBeforeDay = emailRepository.findAllReadyBy(beforeDate);
 		for (EmailEntity medEmail: medicationsReadyBeforeDay) {
 	        String emailToSend = emailMedicationReadyTemplate.getSubstitutedTemplate(medEmail);
-	        String subject = "Is " + medEmail.getMedicationName() + " ready to collect?";
-	        String careHomeEmail = medEmail.getCareHomeEmail();
-	        String pharmacyEmail = medEmail.getPharmacyEmail();
+	        String subject = "Is " + medEmail.getAlertCreatedFrom().getMedForResident().getMedication() + " ready to collect?";
+	        String careHomeEmail = medEmail.getAlertCreatedFrom().getMedForResident().getResident().getCareHome().getEmail();
+	        String pharmacyEmail = medEmail.getPharmacy().getEmail();
 	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
 	        
 	        if (hasSent) {
 	        	medEmail.setStatus(EmailStatus.ASKED_IF_READY.getMessage());
-	        	medEmail.setDateLastEmailSent(new Date());
+	        	medEmail.setLastEmailSentDate(new Date());
 	        	emailRepository.save(medEmail); //inefficient to save while in a loop. can later refactor out using saveAll() method if needed
 	        	EmailResponse emailResp = new EmailResponse();
 				BeanUtils.copyProperties(medEmail, emailResp);
@@ -192,7 +248,7 @@ public class EmailServiceImpl implements EmailService {
     	if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
 			emailEntity.setStatus(EmailStatus.READY.getMessage());
-			emailEntity.setDateUpdatedByPharmacy(new Date());
+			emailEntity.setRequestLastUpdatedByPharmacy(new Date());
 			emailRepository.save(emailEntity);
 			EmailResponse toReturn = new EmailResponse();
 			BeanUtils.copyProperties(emailEntity, toReturn);
@@ -201,16 +257,20 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public EmailResponse tryResendEmail(String id) {
-		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+	public EmailResponse tryResendEmail(String nonGuessableId) {
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(nonGuessableId);
 		if (canResendEmail(emailEntity)) {
-			EmailRequest emailRequest = new EmailRequest();
-			BeanUtils.copyProperties(emailEntity, emailRequest);
-			emailRequest.setUsersEmail(emailEntity.getCareHomeEmail());
+			AlertEntity alertEntity = emailEntity.getAlertCreatedFrom();
+			String careHomeName = alertEntity.getMedForResident().getResident().getCareHome().getName();
+			String careHomeEmail = alertEntity.getMedForResident().getResident().getCareHome().getEmail();
+			String pharmacyEmail = alertEntity.getMedForResident().getPharmacy().getEmail();
+			String medicationName = alertEntity.getMedForResident().getMedication().getName();
+			String residentName = alertEntity.getMedForResident().getResident().getFullName();
+			EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
 			boolean hasSent = sendMedicationRequestEmail(emailRequest, emailEntity.getNonGuessableId());
 			
 			if (hasSent) {
-				emailEntity.setDateLastEmailSent(new Date());
+				emailEntity.setLastEmailSentDate(new Date());
 				EmailEntity savedEmail = emailRepository.save(emailEntity);
 				EmailResponse emailResponse = new EmailResponse();
 				BeanUtils.copyProperties(savedEmail, emailResponse);
@@ -232,7 +292,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 		//email has to be sent yesterday or earlier to resend
 		Date zeroHourThisMorning = DateHelper.getStartOfDayXDaysInAdvance(0);
-		if (emailEntity.getDateLastEmailSent().before(zeroHourThisMorning)) {
+		if (emailEntity.getLastEmailSentDate().before(zeroHourThisMorning)) {
 			return true;
 		} else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.SENDING_TOO_SOON.getErrorMessage());
@@ -240,15 +300,21 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public EmailContentResponse getLastEmailContent(String id) {
+	public EmailContentResponse getLastEmailContent(String nonGuessableId) {
 		//first we need to get which email template to use.
-		EmailEntity emailEntity = emailRepository.findByNonGuessableId(id);
+		EmailEntity emailEntity = emailRepository.findByNonGuessableId(nonGuessableId);
 		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
 		
 		EmailContentResponse toReturn = new EmailContentResponse();
 		toReturn.setNonGuessableId(emailEntity.getNonGuessableId());
 		
-		EmailRequest emailRequest = new EmailRequest();
+		AlertEntity alertEntity = emailEntity.getAlertCreatedFrom();
+		String careHomeName = alertEntity.getMedForResident().getResident().getCareHome().getName();
+		String careHomeEmail = alertEntity.getMedForResident().getResident().getCareHome().getEmail();
+		String pharmacyEmail = alertEntity.getMedForResident().getPharmacy().getEmail();
+		String medicationName = alertEntity.getMedForResident().getMedication().getName();
+		String residentName = alertEntity.getMedForResident().getResident().getFullName();
+		EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
 		BeanUtils.copyProperties(emailEntity, emailRequest);
 		
 		//show initial email if sent initial email, inquiry, or processing
@@ -272,7 +338,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 		
 		emailEntity.setStatus(EmailStatus.COMPLETED.getMessage());
-		emailEntity.setCollected(true);
 		EmailEntity savedEmailEntity = emailRepository.save(emailEntity);
 		
 		EmailResponse emailResponse = new EmailResponse();
@@ -289,7 +354,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 		
 		emailEntity.setStatus(EmailStatus.READY.getMessage());
-		emailEntity.setCollected(false);
 		EmailEntity savedEmailEntity = emailRepository.save(emailEntity);
 		
 		EmailResponse emailResponse = new EmailResponse();

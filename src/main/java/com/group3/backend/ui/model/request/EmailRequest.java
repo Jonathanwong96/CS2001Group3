@@ -15,6 +15,17 @@ public class EmailRequest {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yy")
 	private Date cycleEndDate;
 	
+	public EmailRequest(String careHomeName, String careHomeEmail,
+			String pharmacyEmail, String medicationName, String residentName) {
+		this.usersEmail = careHomeEmail;
+		this.usersName = careHomeName;
+		this.careHomeEmail = careHomeEmail;
+		this.careHomeName = careHomeName;
+		this.pharmacyEmail = pharmacyEmail;
+		this.medicationName = medicationName;
+		this.residentName = residentName;
+	}
+	
 	public String getUsersEmail() {
 		return usersEmail;
 	}

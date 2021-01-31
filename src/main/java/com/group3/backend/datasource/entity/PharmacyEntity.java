@@ -2,15 +2,25 @@ package com.group3.backend.datasource.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import java.io.Serializable;
+import java.util.List;
 
 @Entity(name="pharmacy")
 public class PharmacyEntity implements Serializable {
-    @Id
+	private static final long serialVersionUID = 2407906315820375745L;
+
+	@Id
     @GeneratedValue
-    private long id;
+    private long pharmacyId;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medForResId")
+    private List<MedicationForResidentEntity> medForResident;   
+    
 
     @Column(nullable=false) //nullable flase indicates that the field MUST be included
     private String name;
@@ -24,7 +34,7 @@ public class PharmacyEntity implements Serializable {
     private String address;
 
     public long getId() {
-        return id;
+        return pharmacyId;
     }
 
     public String getName() {

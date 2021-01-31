@@ -265,10 +265,10 @@ public class EmailMedicationReadyTemplate {
 	
 	public String getSubstitutedTemplate(EmailEntity emailEntity, boolean addLinks) {
     	String template = this.getTemplate();
-    	template = template.replace("[users_email]", emailEntity.getUsersName());
-    	template = template.replace("[medication]", "\'" + emailEntity.getMedicationName() + "\'");
-    	template = template.replace("[resident]", emailEntity.getResidentName());
-    	template = template.replace("[users_name]", emailEntity.getUsersName());
+    	template = template.replace("[users_email]", emailEntity.getAlertCreatedFrom().getMedForResident().getResident().getCareHome().getEmail());
+    	template = template.replace("[medication]", "\'" + emailEntity.getAlertCreatedFrom().getMedForResident().getMedication().getName() + "\'");
+    	template = template.replace("[resident]", emailEntity.getAlertCreatedFrom().getMedForResident().getResident().getFullName());
+    	template = template.replace("[users_name]", emailEntity.getCareHomeName());
     	template = template.replace("[care_home_name]", emailEntity.getCareHomeName());
     	if (addLinks) {
 	    	template = template.replace("[href_ready]", frontEndUrl + "/email/ready-to-collect?" + emailEntity.getNonGuessableId()); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
@@ -280,8 +280,8 @@ public class EmailMedicationReadyTemplate {
     	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-    	template = template.replace("[pharmacy_ready_date]", sdf.format(emailEntity.getDateMedicationToBeReady()));
-    	template = template.replace("[pharmacy_resp_date]", sdf.format(emailEntity.getDateUpdatedByPharmacy()));
+    	template = template.replace("[pharmacy_ready_date]", sdf.format(emailEntity.getDatePharmacySaysReady()));
+    	template = template.replace("[pharmacy_resp_date]", sdf.format(emailEntity.getRequestLastUpdatedByPharmacy()));
     	return template;
 	}
 	

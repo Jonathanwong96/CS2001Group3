@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.group3.backend.datasource.entity.EmailEntity;
+import com.group3.backend.service.helper.EmailStatus;
 
 @Repository
 public interface EmailRepository extends CrudRepository<EmailEntity, Long> {
 	EmailEntity findByNonGuessableId(String nonGuessableId);
-	ArrayList<EmailEntity> findAllByCareHomeName(String careHomeName);
-	@Query("SELECT e FROM email e WHERE e.isCollected = false AND e.dateMedicationToBeReady < :date")
-	ArrayList<EmailEntity> findAllUncollectedBy(@Param("date") Date date);
+	@Query("SELECT e FROM email e WHERE e.status = 'Processing' AND e.datePharmacySaysReady < :date")
+	ArrayList<EmailEntity> findAllReadyBy(@Param("date") Date date);
 }

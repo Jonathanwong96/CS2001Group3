@@ -5,7 +5,8 @@ public enum ErrorMessages {
 	BAD_DATE_FORMAT("Could not parse this date"),
 	UNABLE_TO_SEND_EMAIL("Could not send email"),
 	NOT_RIGHT_STEP("Email status not at right step to do this action"),
-	SENDING_TOO_SOON("Need to wait at least 1 day before this email can be resent.");
+	SENDING_TOO_SOON("Need to wait at least 1 day before this email can be resent."),
+	ALERT_HAS_EMAIL("This alert already has an email associated with it.");
 	
 	private String errorMessage;
 	

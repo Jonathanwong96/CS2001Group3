@@ -5,8 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.group3.backend.service.helper.EmailStatus;
 
@@ -15,43 +19,25 @@ import com.group3.backend.service.helper.EmailStatus;
 @Entity(name="email")
 public class EmailEntity implements Serializable {
 	private static final long serialVersionUID = 3991032399210763160L;
-
+	
+	private Date datePharmacySaysReady;
+	private Date dateRequested;
+	private Date lastEmailSentDate;
+	private Date requestLastUpdatedByPharmacy;
+	private String pharmacyInquiryComment;
+	private String status = EmailStatus.SENT_INITIAL_EMAIL.getMessage();
+	
 	@Id
-    @GeneratedValue
-    private long id;
- 
-    private String medicationName;
-    @Column(nullable=false)
-    private String nonGuessableId;
-    private String status = EmailStatus.SENT_INITIAL_EMAIL.getMessage();
-    private String replyToAddr;
-    private String careHomeName;
-    private String careHomeEmail;
-    @Column(nullable=false)
-    private String pharmacyEmail;
-    private String pharmacyName;
-    private String residentName;
-    private String usersName;
-    private Date dateRequested;
-    private Date dateLastEmailSent;
-    private Date dateUpdatedByPharmacy;
-    private Date dateMedicationToBeReady;
-    private String pharmacyComment;
-    private boolean isCollected = false;
-    private Date cycleEndDate;
-    
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getMedicationName() {
-		return medicationName;
-	}
-	public void setMedicationName(String medicationName) {
-		this.medicationName = medicationName;
-	}
+	private String nonGuessableId;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private AlertEntity alertCreatedFrom;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "pharmacyId")
+	private PharmacyEntity pharmacySentTo;
+	
+	
 	public String getNonGuessableId() {
 		return nonGuessableId;
 	}
@@ -64,77 +50,11 @@ public class EmailEntity implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getPharmacyName() {
-		return pharmacyName;
+	public Date getDatePharmacySaysReady() {
+		return datePharmacySaysReady;
 	}
-	public void setPharmacyName(String pharmacyName) {
-		this.pharmacyName = pharmacyName;
-	}
-	public String getReplyToAddr() {
-		return replyToAddr;
-	}
-	public void setReplyToAddr(String replyToAddr) {
-		this.replyToAddr = replyToAddr;
-	}
-	public String getCareHomeName() {
-		return careHomeName;
-	}
-	public void setCareHomeName(String careHomeName) {
-		this.careHomeName = careHomeName;
-	}
-	public String getPharmacyEmail() {
-		return pharmacyEmail;
-	}
-	public void setPharmacyEmail(String pharmacyEmail) {
-		this.pharmacyEmail = pharmacyEmail;
-	}
-	public String getResidentName() {
-		return residentName;
-	}
-	public void setResidentName(String residentName) {
-		this.residentName = residentName;
-	}
-	public String getUsersName() {
-		return usersName;
-	}
-	public void setUsersName(String usersName) {
-		this.usersName = usersName;
-	}
-	public Date getDateUpdatedByPharmacy() {
-		return dateUpdatedByPharmacy;
-	}
-	public void setDateUpdatedByPharmacy(Date dateUpdatedByPharmacy) {
-		this.dateUpdatedByPharmacy = dateUpdatedByPharmacy;
-	}
-	public String getPharmacyComment() {
-		return pharmacyComment;
-	}
-	public void setPharmacyComment(String pharmacyComment) {
-		this.pharmacyComment = pharmacyComment;
-	}
-	public Date getDateMedicationToBeReady() {
-		return dateMedicationToBeReady;
-	}
-	public void setDateMedicationToBeReady(Date dateMedicationToBeReady) {
-		this.dateMedicationToBeReady = dateMedicationToBeReady;
-	}
-	public boolean isCollected() {
-		return isCollected;
-	}
-	public void setCollected(boolean isCollected) {
-		this.isCollected = isCollected;
-	}
-	public String getCareHomeEmail() {
-		return careHomeEmail;
-	}
-	public void setCareHomeEmail(String careHomeEmail) {
-		this.careHomeEmail = careHomeEmail;
-	}
-	public Date getDateLastEmailSent() {
-		return dateLastEmailSent;
-	}
-	public void setDateLastEmailSent(Date dateLastEmailSent) {
-		this.dateLastEmailSent = dateLastEmailSent;
+	public void setDatePharmacySaysReady(Date datePharmacySaysReady) {
+		this.datePharmacySaysReady = datePharmacySaysReady;
 	}
 	public Date getDateRequested() {
 		return dateRequested;
@@ -142,12 +62,47 @@ public class EmailEntity implements Serializable {
 	public void setDateRequested(Date dateRequested) {
 		this.dateRequested = dateRequested;
 	}
-	public Date getCycleEndDate() {
-		return cycleEndDate;
+	public Date getLastEmailSentDate() {
+		return lastEmailSentDate;
 	}
-	public void setCycleEndDate(Date cycleEndDate) {
-		this.cycleEndDate = cycleEndDate;
+	public void setLastEmailSentDate(Date lastEmailSentDate) {
+		this.lastEmailSentDate = lastEmailSentDate;
 	}
+	public Date getRequestLastUpdatedByPharmacy() {
+		return requestLastUpdatedByPharmacy;
+	}
+	public void setRequestLastUpdatedByPharmacy(Date requestLastUpdatedByPharmacy) {
+		this.requestLastUpdatedByPharmacy = requestLastUpdatedByPharmacy;
+	}
+	public String getPharmacyInquiryComment() {
+		return pharmacyInquiryComment;
+	}
+	public void setPharmacyInquiryComment(String pharmacyInquiryComment) {
+		this.pharmacyInquiryComment = pharmacyInquiryComment;
+	}
+	
+	public String getCareHomeName() {
+		return this.alertCreatedFrom.getMedForResident().getResident().getCareHome().getName();
+	}
+	
+	public PharmacyEntity getPharmacy() {
+		return this.pharmacySentTo;
+	}
+	
+	public AlertEntity getAlertCreatedFrom() {
+		return this.alertCreatedFrom;
+	}
+	
+	public PharmacyEntity getPharmacySentTo() {
+		return pharmacySentTo;
+	}
+	public void setPharmacySentTo(PharmacyEntity pharmacySentTo) {
+		this.pharmacySentTo = pharmacySentTo;
+	}
+	public void setAlertCreatedFrom(AlertEntity alertCreatedFrom) {
+		this.alertCreatedFrom = alertCreatedFrom;
+	}
+
 	
     
 }

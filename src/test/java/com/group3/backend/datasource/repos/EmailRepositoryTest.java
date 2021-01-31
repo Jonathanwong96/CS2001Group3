@@ -2,6 +2,7 @@ package com.group3.backend.datasource.repos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 
 import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.service.helper.DateHelper;
+import com.group3.backend.service.helper.EmailStatus;
 
 
 
@@ -37,19 +39,15 @@ public class EmailRepositoryTest {
 		EmailEntity dayAhead = new EmailEntity();
 		EmailEntity twoDaysAhead = new EmailEntity();
 		
-		beforeCollected.setCollected(true);
-		beforeCollected.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(-2));
+		beforeCollected.setStatus(EmailStatus.COMPLETED.getMessage());
+		beforeCollected.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-2));
 		beforeCollected.setNonGuessableId("1");
-		beforeCollected.setPharmacyEmail("abc@aol.com");
-		before.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(-1));
+		before.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-1));
 		before.setNonGuessableId("2");
-		before.setPharmacyEmail("123@aol.com");
-		dayAhead.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(1));
+		dayAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(1));
 		dayAhead.setNonGuessableId("3");
-		dayAhead.setPharmacyEmail("llll@aol.com");
-		twoDaysAhead.setDateMedicationToBeReady(DateHelper.getStartOfDayXDaysInAdvance(2));
+		twoDaysAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(2));
 		twoDaysAhead.setNonGuessableId("4");
-		twoDaysAhead.setPharmacyEmail("99999@aol.com");
 
 		emailRepository.save(beforeCollected);
 		emailRepository.save(before);
@@ -57,14 +55,14 @@ public class EmailRepositoryTest {
 		emailRepository.save(twoDaysAhead);
 		
 		Date midnightTwoDaysAhead = DateHelper.getStartOfDayXDaysInAdvance(2);
-		ArrayList<EmailEntity> allUncollectedBeforeTwoDaysAhead = emailRepository.findAllUncollectedBy(midnightTwoDaysAhead);
+		ArrayList<EmailEntity> allUncollectedBeforeTwoDaysAhead = emailRepository.findAllReadyBy(midnightTwoDaysAhead);
 		
 		assertEquals(2, allUncollectedBeforeTwoDaysAhead.size());
 		for (EmailEntity emailEntity: allUncollectedBeforeTwoDaysAhead) {
-			Date medReadyDate = emailEntity.getDateMedicationToBeReady();
-			assertFalse(emailEntity.isCollected());
-			assertTrue(medReadyDate.equals(before.getDateMedicationToBeReady()) 
-					|| medReadyDate.equals(dayAhead.getDateMedicationToBeReady()));
+			Date medReadyDate = emailEntity.getDatePharmacySaysReady();
+			assertNotEquals(emailEntity.getStatus(), EmailStatus.COMPLETED.getMessage());
+			assertTrue(medReadyDate.equals(before.getDatePharmacySaysReady()) 
+					|| medReadyDate.equals(dayAhead.getDatePharmacySaysReady()));
 		}
 	}
 }

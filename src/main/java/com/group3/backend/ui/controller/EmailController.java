@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group3.backend.service.EmailService;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
+import com.group3.backend.ui.model.request.NewEmailRequest;
 import com.group3.backend.ui.model.response.EmailContentResponse;
 import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.EmailStatusResponse;
@@ -25,14 +26,14 @@ public class EmailController {
     EmailService emailService;
     
     @GetMapping
-    public ArrayList<EmailResponse> getAllEmailRequests(@RequestParam String careHomeName) {
-    	return emailService.getAllEmailsForCareHome(careHomeName);
+    public ArrayList<EmailResponse> getAllEmailRequests(@RequestParam long careHomeId) {
+    	return emailService.getAllEmailsForCareHome(careHomeId);
     }
 
     @PostMapping
-    public EmailResponse sendEmail(@RequestBody EmailRequest emailRequest) {
+    public EmailResponse sendEmail(@RequestBody NewEmailRequest emailRequest) {
     	//for now just sending the emailRequest with all fields. Once logins are introduced can reduce the fields that emailRequest accepts and get them from the user jwt.
-    	return emailService.saveMedicationRequestEmail(emailRequest);
+    	return emailService.saveMedicationRequestEmail(emailRequest.getAlertId());
     }
     
     @GetMapping (path="show-email-content")
