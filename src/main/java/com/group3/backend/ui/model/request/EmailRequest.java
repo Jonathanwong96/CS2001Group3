@@ -8,11 +8,23 @@ public class EmailRequest {
 	private String usersEmail;
 	private String usersName;
 	private String careHomeName;
+	private String careHomeEmail;
 	private String pharmacyEmail;
 	private String medicationName;
 	private String residentName;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yy")
 	private Date cycleEndDate;
+	
+	public EmailRequest(String careHomeName, String careHomeEmail,
+			String pharmacyEmail, String medicationName, String residentName) {
+		this.usersEmail = careHomeEmail;
+		this.usersName = careHomeName;
+		this.careHomeEmail = careHomeEmail;
+		this.careHomeName = careHomeName;
+		this.pharmacyEmail = pharmacyEmail;
+		this.medicationName = medicationName;
+		this.residentName = residentName;
+	}
 	
 	public String getUsersEmail() {
 		return usersEmail;
@@ -56,6 +68,11 @@ public class EmailRequest {
 	public void setCycleEndDate(Date cycleEndDate) {
 		this.cycleEndDate = cycleEndDate;
 	}
-	
+	public String getCareHomeEmail() {
+		return careHomeEmail;
+	}
+	public void setCareHomeEmail(String careHomeEmail) {
+		this.careHomeEmail = careHomeEmail;
+	}
 	
 }
