@@ -34,6 +34,7 @@ public class PharmacyEntity implements Serializable {
     private String email;
     @Column(nullable=false)
     private String phoneNumb;
+
     private String address;
 
     public long getId() {

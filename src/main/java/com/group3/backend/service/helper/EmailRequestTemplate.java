@@ -269,7 +269,7 @@ public class EmailRequestTemplate {
     	template = template.replace("[users_email]", emailRequest.getCareHomeEmail());
     	template = template.replace("[medication]", "\'" + emailRequest.getMedicationName() + "\'");
     	template = template.replace("[resident]", emailRequest.getResidentName());
-    	template = template.replace("[users_name]", emailRequest.getUsersName());
+    	template = template.replace("[users_name]", emailRequest.getCareWorkerName());
     	template = template.replace("[care_home_name]", emailRequest.getCareHomeName());
     	if (addLinks) {
 	    	template = template.replace("[href_accept]", frontEndUrl + "/email/set-date?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo

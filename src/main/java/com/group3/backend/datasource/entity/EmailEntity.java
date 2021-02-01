@@ -74,6 +74,7 @@ public class EmailEntity implements Serializable {
 	public void setRequestLastUpdatedByPharmacy(Date requestLastUpdatedByPharmacy) {
 		this.requestLastUpdatedByPharmacy = requestLastUpdatedByPharmacy;
 	}
+	
 	public String getPharmacyInquiryComment() {
 		return pharmacyInquiryComment;
 	}
