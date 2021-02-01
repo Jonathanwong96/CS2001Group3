@@ -20,7 +20,7 @@ public class MedicationEntity implements Serializable {
     private String name;
     private String description;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="medForResId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="medication")
     private List<MedicationForResidentEntity> allResidentsForMedication;
     
 	public String getName() {

@@ -21,9 +21,12 @@ public class CareHomeEntity implements Serializable {
     private String email;
     private boolean usesAutoEmail;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="residentId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<ResidentEntity> residents;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
+    private List<PharmacyEntity> pharmacies;
+    
 	public List<ResidentEntity> getResidents() {
 		return residents;
 	}
@@ -54,5 +57,13 @@ public class CareHomeEntity implements Serializable {
 
 	public void setUsesAutoEmail(boolean usesAutoEmail) {
 		this.usesAutoEmail = usesAutoEmail;
+	}
+
+	public List<PharmacyEntity> getPharmacies() {
+		return pharmacies;
+	}
+
+	public void setPharmacies(List<PharmacyEntity> pharmacies) {
+		this.pharmacies = pharmacies;
 	}
 }

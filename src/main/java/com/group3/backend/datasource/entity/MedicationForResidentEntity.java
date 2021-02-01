@@ -31,13 +31,13 @@ public class MedicationForResidentEntity implements Serializable {
     @JoinColumn(name = "pharmacyId")
     private PharmacyEntity pharmacy;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "alertId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medForResident")
     private List<AlertEntity> alertsForMedication;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medCountId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationForResident")
     private List<MedicationCountEntity> medicationCounts;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medDoseId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationforResident")
     private List<MedicationDoseEntity> medicationDoses;
 
     

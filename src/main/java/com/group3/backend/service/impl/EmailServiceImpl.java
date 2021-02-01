@@ -3,6 +3,7 @@ package com.group3.backend.service.impl;
 import com.group3.backend.datasource.entity.CareHomeEntity;
 import com.group3.backend.datasource.entity.AlertEntity;
 import com.group3.backend.datasource.entity.EmailEntity;
+import com.group3.backend.datasource.entity.MedicationCountEntity;
 import com.group3.backend.datasource.entity.MedicationForResidentEntity;
 import com.group3.backend.datasource.entity.ResidentEntity;
 import com.group3.backend.datasource.repos.AlertRepository;
@@ -147,7 +148,7 @@ public class EmailServiceImpl implements EmailService {
 	            mimeMessageHelper.setReplyTo(careHomeEmail);
 	            mimeMessageHelper.setTo(pharmacyEmail);
 	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
-//	            mailSender.send(mimeMessageHelper.getMimeMessage());
+	            mailSender.send(mimeMessageHelper.getMimeMessage());
 	            return true;
 		 } catch (Exception e) {
 			 return false;
@@ -182,6 +183,14 @@ public class EmailServiceImpl implements EmailService {
 			String medicationName = alertEntity.getMedForResident().getMedication().getName();
 			String residentName = alertEntity.getMedForResident().getResident().getFullName();
 			EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
+			
+			//for the cycle end date, we should get the latest count and use that
+			List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
+			counts.sort((thisObj, that) -> {
+				return that.getCountDoneOnDate().compareTo(thisObj.getCountDoneOnDate());
+			});;
+			emailRequest.setCycleEndDate(counts.get(0).getCyclePredictedToEndOn());
+			
 			String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);			
 	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
 	        
@@ -267,6 +276,14 @@ public class EmailServiceImpl implements EmailService {
 			String medicationName = alertEntity.getMedForResident().getMedication().getName();
 			String residentName = alertEntity.getMedForResident().getResident().getFullName();
 			EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
+			
+			//for the cycle end date, we should get the latest count and use that
+			List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
+			counts.sort((thisObj, that) -> {
+				return that.getCountDoneOnDate().compareTo(thisObj.getCountDoneOnDate());
+			});;
+			emailRequest.setCycleEndDate(counts.get(0).getCyclePredictedToEndOn());
+			
 			boolean hasSent = sendMedicationRequestEmail(emailRequest, emailEntity.getNonGuessableId());
 			
 			if (hasSent) {
@@ -315,6 +332,14 @@ public class EmailServiceImpl implements EmailService {
 		String medicationName = alertEntity.getMedForResident().getMedication().getName();
 		String residentName = alertEntity.getMedForResident().getResident().getFullName();
 		EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
+		
+		//for the cycle end date, we should get the latest count and use that
+		List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
+		counts.sort((thisObj, that) -> {
+			return that.getCountDoneOnDate().compareTo(thisObj.getCountDoneOnDate());
+		});;
+		emailRequest.setCycleEndDate(counts.get(0).getCyclePredictedToEndOn());
+		
 		BeanUtils.copyProperties(emailEntity, emailRequest);
 		
 		//show initial email if sent initial email, inquiry, or processing

@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 public class ResidentEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private Long residentId;	
 	
     @Column(nullable=false)
@@ -28,11 +28,13 @@ public class ResidentEntity {
 	private String bio;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "careHomeId")
+	@JoinColumn(name = "carehomeId")
 	private CareHomeEntity careHome;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medForResId")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "resident")
 	private List<MedicationForResidentEntity> allMedicationsForResident;
+	
+	
 	
 	public Long getResidentId() {
 		return residentId;
