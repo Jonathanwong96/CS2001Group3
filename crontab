@@ -1,0 +1,2 @@
+#send out emails to ask if medication is ready for collection at 08:55 every weekday
+55 8 * * 1-5 curl localhost:8080/email/ask-if-ready

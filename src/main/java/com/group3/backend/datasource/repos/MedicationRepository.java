@@ -1,12 +1,11 @@
 package com.group3.backend.datasource.repos;
 
-import com.group3.backend.datasource.entity.PharmacyEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.group3.backend.datasource.entity.MedicationEntity;
 
 @Repository
-public interface PharmacyRepository extends CrudRepository<PharmacyEntity, Long> {
-	
+public interface MedicationRepository extends CrudRepository<MedicationEntity, Long> {
+
 }
