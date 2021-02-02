@@ -7,8 +7,13 @@ public class EmailResponse {
 	private String pharmacyEmail;
 	private String residentName;
 	private String medicationName;
-	private Date dateSent;
-	private Date dateUpdatedByPharmacy;
+    private Date dateRequested;
+    private Date dateLastEmailSent;
+    private Date dateUpdatedByPharmacy;
+    private Date dateMedicationToBeReady;
+    private String pharmacyComment;
+    private String nonGuessableId;
+
 	
 	public String getStatus() {
 		return status;
@@ -34,17 +39,41 @@ public class EmailResponse {
 	public void setMedicationName(String medicationName) {
 		this.medicationName = medicationName;
 	}
-	public Date getDateSent() {
-		return dateSent;
-	}
-	public void setDateSent(Date dateSent) {
-		this.dateSent = dateSent;
-	}
 	public Date getDateUpdatedByPharmacy() {
 		return dateUpdatedByPharmacy;
 	}
 	public void setDateUpdatedByPharmacy(Date dateUpdatedByPharmacy) {
 		this.dateUpdatedByPharmacy = dateUpdatedByPharmacy;
+	}
+	public Date getDateRequested() {
+		return dateRequested;
+	}
+	public void setDateRequested(Date dateRequested) {
+		this.dateRequested = dateRequested;
+	}
+	public Date getDateLastEmailSent() {
+		return dateLastEmailSent;
+	}
+	public void setDateLastEmailSent(Date dateLastEmailSent) {
+		this.dateLastEmailSent = dateLastEmailSent;
+	}
+	public Date getDateMedicationToBeReady() {
+		return dateMedicationToBeReady;
+	}
+	public void setDateMedicationToBeReady(Date dateMedicationToBeReady) {
+		this.dateMedicationToBeReady = dateMedicationToBeReady;
+	}
+	public String getPharmacyComment() {
+		return pharmacyComment;
+	}
+	public void setPharmacyComment(String pharmacyComment) {
+		this.pharmacyComment = pharmacyComment;
+	}
+	public String getNonGuessableId() {
+		return nonGuessableId;
+	}
+	public void setNonGuessableId(String nonGuessableId) {
+		this.nonGuessableId = nonGuessableId;
 	}
 	
 	

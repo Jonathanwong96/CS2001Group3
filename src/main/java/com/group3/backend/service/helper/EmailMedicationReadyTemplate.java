@@ -9,7 +9,7 @@ import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.ui.model.request.EmailRequest;
 
 @Component
-public class EmailRequestTemplate {
+public class EmailMedicationReadyTemplate {
     @Value("${frontEnd.url}")
     private String frontEndUrl;
 	
@@ -159,7 +159,7 @@ public class EmailRequestTemplate {
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif\"><![endif]-->\n" + 
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
 			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;\">\n" + 
-			"<p style=\"font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;\">New Medication Request</p>\n" + 
+			"	<p style=\"font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;\">Medication Status Request</p>\n" + 
 			"</div>\n" + 
 			"</div>\n" + 
 			"<!--[if mso]></td></tr></table><![endif]-->\n" + 
@@ -182,11 +182,11 @@ public class EmailRequestTemplate {
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
 			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;white-space: pre-wrap\">Hi there, this is from [users_email] using caringforcarehomes.com\n" + 
 			"\n" + 
-			"We're running low on [medication] for [resident] and would like to order another cycle. Their current cycle ends on [date]. Please could you click on one of the buttons below to inform the app whether this is possible or not?\n" + 
+			"We had confirmation on [pharmacy_resp_date] that [medication] for [resident] would be ready to collect on [pharmacy_ready_date]. Please could you click on one of the buttons below to let us know whether we can collect the medication on this date?\n" + 
 			"\n" + 
 			"Thankyou!\n" + 
 			"\n" + 
-			"[users_name] from [care_home_name]</div>\n" + 
+			"[users_name]</div>\n" + 
 			"</div>\n" + 
 			"<!--[if mso]></td></tr></table><![endif]-->\n" + 
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"divider\" role=\"presentation\" style=\"table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;\" valign=\"top\" width=\"100%\">\n" + 
@@ -206,12 +206,12 @@ public class EmailRequestTemplate {
 			"</table>\n" + 
 			"<div align=\"center\" class=\"button-container\" style=\"padding-top:30px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;\"><tr><td style=\"padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px\" align=\"center\"><v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"\" style=\"height:28.5pt; width:142.5pt; v-text-anchor:middle;\" arcsize=\"11%\" strokeweight=\"1.5pt\" strokecolor=\"#000000\" fillcolor=\"#008450\"><w:anchorlock/><v:textbox inset=\"0,0,0,0\"><center style=\"color:#ffffff; font-family:Arial, sans-serif; font-size:16px\"><![endif]-->\n" + 
-			"<a href=\"[href_accept]\" style=\"cursor:pointer;text-decoration:none;display:inline-block;color:#ffffff;background-color:#FAD0C9;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; mso-line-height-alt: 24px;color: #6e6e6d\">Processing Medication</span></span></a>\n" + 
+			"<a href=\"[href_ready]\" style=\"text-decoration:none;display:inline-block;color:#ffffff;background-color:#FAD0C9;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; mso-line-height-alt: 24px;color: #6e6e6d\">Medication is ready for [pharmacy_ready_date]</span></span></a>\n" + 
 			"<!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->\n" + 
 			"</div>\n" + 
 			"<div align=\"center\" class=\"button-container\" style=\"padding-top:10px;padding-right:10px;padding-bottom:30px;padding-left:10px;\">\n" + 
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;\"><tr><td style=\"padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px\" align=\"center\"><v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"\" style=\"height:28.5pt; width:179.25pt; v-text-anchor:middle;\" arcsize=\"11%\" strokeweight=\"1.5pt\" strokecolor=\"#000000\" fillcolor=\"#efb700\"><w:anchorlock/><v:textbox inset=\"0,0,0,0\"><center style=\"color:#ffffff; font-family:Arial, sans-serif; font-size:16px\"><![endif]-->\n" + 
-			"<a href=\"[href_inquiry]\" style=\"cursor:pointer;text-decoration:none;display:inline-block;color:#ffffff;background-color:#6E6E6D;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:47px;padding-right:47px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 24px;color: #FAD0C9\">Inquiry needed</span></span></a>\n" + 
+			"<a href=\"[href_set-date]\" style=\"text-decoration:none;display:inline-block;color:#ffffff;background-color:#6E6E6D;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;width:auto; width:auto;;border-top:2px solid #000000;border-right:2px solid #000000;border-bottom:2px solid #000000;border-left:2px solid #000000;padding-top:5px;padding-bottom:5px;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;\"><span style=\"padding-left:47px;padding-right:47px;font-size:16px;display:inline-block;\"><span style=\"font-size: 16px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 24px;color: #FAD0C9\">More time needed</span></span></a>\n" + 
 			"<!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->\n" + 
 			"</div>\n" + 
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"divider\" role=\"presentation\" style=\"table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;\" valign=\"top\" width=\"100%\">\n" + 
@@ -253,35 +253,35 @@ public class EmailRequestTemplate {
 			"</tbody>\n" + 
 			"</table>\n" + 
 			"<!--[if (IE)]></div><![endif]-->\n" + 
-			"\n" + 
-			"</body></html>";
+			"</body></html>\n";
 
-	private String getTemplate() {
+	public String getTemplate() {
 		return template;
 	}
 	
-	public String getSubstitutedTemplate(EmailRequest emailRequest, String nonGuessableId) {
-		return getSubstitutedTemplate(emailRequest, nonGuessableId, true);
+	public String getSubstitutedTemplate(EmailEntity emailEntity) {
+		return getSubstitutedTemplate(emailEntity, true);
 	}
 	
-	public String getSubstitutedTemplate(EmailRequest emailRequest, String nonGuessableId, boolean addLinks) {
+	public String getSubstitutedTemplate(EmailEntity emailEntity, boolean addLinks) {
     	String template = this.getTemplate();
-    	template = template.replace("[users_email]", emailRequest.getCareHomeEmail());
-    	template = template.replace("[medication]", "\'" + emailRequest.getMedicationName() + "\'");
-    	template = template.replace("[resident]", emailRequest.getResidentName());
-    	template = template.replace("[users_name]", emailRequest.getUsersName());
-    	template = template.replace("[care_home_name]", emailRequest.getCareHomeName());
+    	template = template.replace("[users_email]", emailEntity.getAlertCreatedFrom().getMedForResident().getResident().getCareHome().getEmail());
+    	template = template.replace("[medication]", "\'" + emailEntity.getAlertCreatedFrom().getMedForResident().getMedication().getName() + "\'");
+    	template = template.replace("[resident]", emailEntity.getAlertCreatedFrom().getMedForResident().getResident().getFullName());
+    	template = template.replace("[users_name]", emailEntity.getCareHomeName());
+    	template = template.replace("[care_home_name]", emailEntity.getCareHomeName());
     	if (addLinks) {
-	    	template = template.replace("[href_accept]", frontEndUrl + "/email/set-date?" + nonGuessableId); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
-	    	template = template.replace("[href_inquiry]", frontEndUrl + "/email/inquiry?" + nonGuessableId);
+	    	template = template.replace("[href_ready]", frontEndUrl + "/email/ready-to-collect?" + emailEntity.getNonGuessableId()); //http://localhost:3000/email/confirmation?vb4nqCj3VUCpA7Xr7Mvo
+	    	template = template.replace("[href_set-date]", frontEndUrl + "/email/set-date?" + emailEntity.getNonGuessableId());
     	} else {
-    		template = template.replace("href=\"[href_accept]\"", "");
+       		template = template.replace("href=\"[href_accept]\"", "");
     		template = template.replace("href=\"[href_inquiry]\"", "");
     	}
     	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-    	template = template.replace("[date]", sdf.format(emailRequest.getCycleEndDate()));
+    	template = template.replace("[pharmacy_ready_date]", sdf.format(emailEntity.getDatePharmacySaysReady()));
+    	template = template.replace("[pharmacy_resp_date]", sdf.format(emailEntity.getRequestLastUpdatedByPharmacy()));
     	return template;
 	}
 	
