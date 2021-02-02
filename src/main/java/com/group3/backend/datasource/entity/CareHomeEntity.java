@@ -16,8 +16,8 @@ public class CareHomeEntity implements Serializable {
 	@Id
     @GeneratedValue
     private long careHomeId;
-    
-    private String name;
+
+	private String name;
     private String email;
     private boolean usesAutoEmail;
     
@@ -65,5 +65,13 @@ public class CareHomeEntity implements Serializable {
 
 	public void setPharmacies(List<PharmacyEntity> pharmacies) {
 		this.pharmacies = pharmacies;
+	}
+
+    public long getCareHomeId() {
+		return careHomeId;
+	}
+
+	public void setCareHomeId(long careHomeId) {
+		this.careHomeId = careHomeId;
 	}
 }
