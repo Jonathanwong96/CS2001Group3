@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.backend.service.ResidentService;
@@ -35,8 +36,8 @@ public class ResidentController {
 	}
 	
 	@GetMapping
-    public ArrayList<ResidentResponse> getAllPharmaciesForHome(@RequestBody UserDetailsRequestModel udrm) {
-        return residentService.getAllResidentsForHome(udrm.getCareHomeId());
+    public ArrayList<ResidentResponse> getAllPharmaciesForHome(@RequestParam long careHomeId) {
+        return residentService.getAllResidentsForHome(careHomeId);
     }
 	
 }
