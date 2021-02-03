@@ -7,8 +7,5 @@ import com.group3.backend.datasource.entity.MedicationEntity;
 
 @Repository
 public interface MedicationRepository extends CrudRepository<MedicationEntity, Long> {
-		
-//	    Optional <MedicationEntity> findById(long id);
-	
-}
 
+}
