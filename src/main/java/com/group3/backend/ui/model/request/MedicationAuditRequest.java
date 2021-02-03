@@ -1,54 +1,45 @@
 package com.group3.backend.ui.model.request;
 
+import java.util.Date;
+
 public class MedicationAuditRequest {
 
-	private Long id;
-	private String name;
-	private int dayCount;
-	private int eveningCount;
-	private int initialMedicationCount;
-	private Long staffId;
+	private long medCountId;
+	private boolean isMorningCount; //if not morning count, will be the evening count
+	private Date countDoneOnDate;
+	private Date cyclePredictedToEndOn;
+	private int count;
 
-	public Long getId() {
-		return id;
+	public long medCountId(){
+		return medCountId;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setMedCountId(long medCountId){
+		this.medCountId = medCountId;
 	}
 
-	public int getDayCount() {
-		return dayCount;
+	public boolean isMorningCount() {
+		return isMorningCount;
 	}
-	public void setDayCount(int dayCount) {
-		this.dayCount = dayCount;
+	public void setMorningCount(boolean isMorningCount) {
+		this.isMorningCount = isMorningCount;
 	}
-
-	public int getEveningCount() {
-		return eveningCount;
+	public Date getCountDoneOnDate() {
+		return countDoneOnDate;
 	}
-	public void setEveningCount(int eveningCount) {
-		this.eveningCount = eveningCount;
+	public void setCountDoneOnDate(Date countDoneOnDate) {
+		this.countDoneOnDate = countDoneOnDate;
 	}
-
-	public int getInitialMedicationCount() {
-		return initialMedicationCount;
+	public Date getCyclePredictedToEndOn() {
+		return cyclePredictedToEndOn;
 	}
-	public void setInitialMedicationCount(int initialMedicationCount) {
-		this.initialMedicationCount = initialMedicationCount;
+	public void setCyclePredictedToEndOn(Date cyclePredictedToEndOn) {
+		this.cyclePredictedToEndOn = cyclePredictedToEndOn;
 	}
-
-	public Long getStaffId() {
-		return staffId;
+	public int getCount() {
+		return count;
 	}
-	public void setStaffId(Long staffId) {
-		this.staffId = staffId;
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 
