@@ -7,22 +7,23 @@ import javax.persistence.Id;
 
 @Entity(name="medication")
 public class MedicationDetailsModel {
+	
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	private String description;
-	private String dosage;
-	private Character medicationClass;
 	private String medicationName;
+	private String medicationClass;
+	private String dosage;
 	private String pharmacyName;
 	private Integer prescriptionCount;
 	
 	public MedicationDetailsModel() {
 		
 	}
-	public MedicationDetailsModel(String medicationDescription, String dosage, Character medicationClass,
+	public MedicationDetailsModel(String medicationDescription, String dosage, String medicationClass,
 			String medicationName, String pharmacyName, Integer prescriptionCount) {
 		this.description = medicationDescription;
 		this.dosage = dosage;
@@ -51,10 +52,10 @@ public class MedicationDetailsModel {
 	public void setDosage(String dosage) {
 		this.dosage = dosage;
 	}
-	public Character getMedicationClass() {
+	public String getMedicationClass() {
 		return medicationClass;
 	}
-	public void setMedicationClass(Character medicationClass) {
+	public void setMedicationClass(String medicationClass) {
 		this.medicationClass = medicationClass;
 	}
 	public String getMedicationName() {
