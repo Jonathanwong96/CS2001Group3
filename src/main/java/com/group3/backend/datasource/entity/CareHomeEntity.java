@@ -19,7 +19,7 @@ public class CareHomeEntity implements Serializable {
 
 	private String name;
     private String email;
-    private boolean usesAutoEmail;
+    private boolean usesAutoEmail = false;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<ResidentEntity> residents;

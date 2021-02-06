@@ -9,7 +9,6 @@ import com.group3.backend.ui.model.request.AutomaticEmailRequest;
 
 public interface AutomaticEmailService {
 	AutomaticEmailResponse updateAutomaticEmail(AutomaticEmailRequest autoEmailRequest);
-	AutomaticEmailResponse createAutomaticEmail(AutomaticEmailRequest autoEmailRequest);
 	AutomaticEmailResponse getUsesAutomaticEmail(long careHomeId);
 	ArrayList<EmailResponse> sendEmailsForAllNewAlerts();
 }
