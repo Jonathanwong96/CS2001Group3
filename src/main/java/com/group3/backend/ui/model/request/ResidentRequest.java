@@ -10,9 +10,15 @@ public class ResidentRequest {
 	private int age;
 	private String guardianName;
 	private String bio;
-	
+	private boolean archived;
 
 
+	public boolean isArchived() {
+		return archived;
+	}
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

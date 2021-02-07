@@ -1,7 +1,4 @@
 package com.group3.backend.service.impl;
-
-
-import com.group3.backend.datasource.entity.PharmacyEntity;
 import com.group3.backend.datasource.entity.ResidentEntity;
 
 import com.group3.backend.datasource.repos.ResidentRepository;
@@ -9,7 +6,6 @@ import com.group3.backend.datasource.repos.ResidentRepository;
 import com.group3.backend.service.ResidentService;
 
 import com.group3.backend.ui.model.request.ResidentRequest;
-import com.group3.backend.ui.model.response.PharmacyResponse;
 import com.group3.backend.ui.model.response.ResidentResponse;
 
 import java.util.ArrayList;
@@ -36,6 +32,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public ResidentResponse editResident(ResidentRequest residentRequest) {
     	if (residentRepository.existsById(residentRequest.getResidentId())) {
+    		
         	ResidentResponse toReturn = new ResidentResponse();
             BeanUtils.copyProperties(repoSave(residentRequest), toReturn);
             toReturn.setOperationMessage("edit Complete");
@@ -43,7 +40,9 @@ public class ResidentServiceImpl implements ResidentService {
     	}
     	else {
     		//return user-friendly JSON "Resident by Id not found"
-    		return null;
+    		ResidentResponse toReturn = new ResidentResponse();
+            toReturn.setOperationMessage("Resident by Id not found");
+    		return toReturn;
     	}
     }
     
@@ -68,6 +67,6 @@ public class ResidentServiceImpl implements ResidentService {
     private ResidentEntity repoSave(ResidentRequest residentRequest) {
     	ResidentEntity residentEntity = new ResidentEntity();
         BeanUtils.copyProperties(residentRequest, residentEntity);
-        return residentRepository.save(residentEntity);	
+        return residentRepository.save(residentEntity);
     }
 }
