@@ -23,7 +23,7 @@ public class PharmacyController {
     }
     
     @GetMapping
-    public ArrayList<PharmacyResponse> getAllPharmaciesForHome(@RequestBody UserDetailsRequestModel udrm) {
-        return pharmacyService.getAllPharmaciesForHome(udrm.getCareHomeId());
+    public ArrayList<PharmacyResponse> getAllPharmaciesForHome(@RequestParam long careHomeId) {
+        return pharmacyService.getAllPharmaciesForHome(careHomeId);
     }
 }

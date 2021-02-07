@@ -1,21 +1,24 @@
 package com.group3.backend.datasource.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name="resident")
-public class ResidentEntity implements Serializable{
-	
+public class ResidentEntity {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long residentId;
+	@GeneratedValue
+	private Long residentId;	
 	
-    @Column(nullable=false)
-	private Long careHomeId;
     @Column(nullable=false)
 	private String firstName;
     @Column(nullable=false)
@@ -25,12 +28,20 @@ public class ResidentEntity implements Serializable{
 	private String bio;
 	private boolean archived = false;
 	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "carehomeId")
+	private CareHomeEntity careHome;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "resident")
+	private List<MedicationForResidentEntity> allMedicationsForResident;
+	
 	public boolean isArchived() {
 		return archived;
 	}
 	public void setArchived(boolean archived) {
 		this.archived = archived;
-	}
+	}	
 	public Long getResidentId() {
 		return residentId;
 	}
@@ -45,6 +56,9 @@ public class ResidentEntity implements Serializable{
 	}
 	public void setSurName(String sureName) {
 		this.surName = sureName;
+	}
+	public String getFullName() {
+		return this.firstName + " " + this.surName;
 	}
 	public int getAge() {
 		return age;
@@ -67,10 +81,18 @@ public class ResidentEntity implements Serializable{
 	public void setResidentId(Long residentId) {
 		this.residentId = residentId;
 	}
-	public Long getCareHomeId() {
-		return careHomeId;
+
+	public CareHomeEntity getCareHome() {
+		return careHome;
 	}
-	public void setCareHomeId(Long careHomeId) {
-		this.careHomeId = careHomeId;
+	
+	public List<MedicationForResidentEntity> getAllMedicationsForResident() {
+		return allMedicationsForResident;
+	}
+	public void setAllMedicationsForResident(List<MedicationForResidentEntity> allMedicationsForResident) {
+		this.allMedicationsForResident = allMedicationsForResident;
+	}
+	public void setCareHome(CareHomeEntity careHome) {
+		this.careHome = careHome;
 	}
 }
