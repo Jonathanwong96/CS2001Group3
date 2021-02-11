@@ -12,6 +12,7 @@ import com.group3.backend.ui.model.request.EmailRequest;
 public class EmailMedicationReadyTemplate {
     @Value("${frontEnd.url}")
     private String frontEndUrl;
+   
 	
 	private final String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" + 
 			"<!-- saved from url=(0098)file:///C:/Users/whata/AppData/Local/Temp/Temp1_beefree-k9b5psb3ttg-2.zip/beefree-k9b5psb3ttg.html -->\n" + 

@@ -153,7 +153,7 @@ public class EmailServiceImpl implements EmailService {
 	            mimeMessageHelper.setReplyTo(careHomeEmail);
 	            mimeMessageHelper.setTo(pharmacyEmail);
 	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
-	            mailSender.send(mimeMessageHelper.getMimeMessage());
+	          //  mailSender.send(mimeMessageHelper.getMimeMessage());
 	            return true;
 		 } catch (Exception e) {
 			 return false;
