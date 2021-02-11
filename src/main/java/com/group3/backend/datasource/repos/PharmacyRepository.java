@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PharmacyRepository extends CrudRepository<PharmacyEntity, Long> {
-    List<PharmacyEntity> findAllByCareHomeId(long careHomeId);
+	
 }

@@ -7,15 +7,15 @@ public class PharmacyRequest {
     private String email;
     private String address;
     private String phoneNumb;
-    private boolean isDefault;
+    private Long careHomeId;
     private String name;
 
-    public boolean isDefault() {
-        return isDefault;
+    public Long getCareHomeId() {
+        return careHomeId;
     }
 
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
+    public void setCareHomeId(Long careHomeId) {
+        this.careHomeId = careHomeId;
     }
 
     public String getName() {

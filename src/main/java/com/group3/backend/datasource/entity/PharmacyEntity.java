@@ -2,28 +2,43 @@ package com.group3.backend.datasource.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import java.io.Serializable;
+import java.util.List;
 
 @Entity(name="pharmacy")
-public class PharmacyEntity {
-    @Id
-    @GeneratedValue
-    private long id;
+public class PharmacyEntity implements Serializable {
+	private static final long serialVersionUID = 2407906315820375745L;
 
-    @Column(nullable=false) //nullable flase indicates that the field MUST be included
+	@Id
+    @GeneratedValue
+    private long pharmacyId;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pharmacy")
+    private List<MedicationForResidentEntity> medForResident;   
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "careHomeId")
+    private CareHomeEntity careHome;
+    
+
+	@Column(nullable=false) //nullable flase indicates that the field MUST be included
     private String name;
     @Column(nullable=false)
     private String email;
     @Column(nullable=false)
-    private Long careHomeId;
-    private boolean isDefault;
     private String phoneNumb;
+
     private String address;
 
     public long getId() {
-        return id;
+        return pharmacyId;
     }
 
     public String getName() {
@@ -58,19 +73,11 @@ public class PharmacyEntity {
         this.phoneNumb = phoneNumb;
     }
 
-    public Long getCareHomeId() {
-        return careHomeId;
-    }
+    public CareHomeEntity getCareHome() {
+		return careHome;
+	}
 
-    public void setCareHomeId(Long careHomeId) {
-        this.careHomeId = careHomeId;
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
+	public void setCareHome(CareHomeEntity careHome) {
+		this.careHome = careHome;
+	}
 }
