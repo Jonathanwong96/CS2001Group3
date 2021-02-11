@@ -32,6 +32,7 @@ public class ResidentController {
 	
 	@PutMapping
 	public ResidentResponse editResident(@RequestBody ResidentRequest residentRequest) {
+		
 		return residentService.editResident(residentRequest);
 	}
 	
