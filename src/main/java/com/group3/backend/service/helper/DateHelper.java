@@ -12,4 +12,11 @@ public class DateHelper {
 		lDate = lDate.plusDays(daysInAdvance);
 		return Date.from(lDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
+	
+    public static Date addDays(Date date, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
 }

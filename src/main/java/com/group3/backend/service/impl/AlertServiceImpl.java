@@ -10,7 +10,7 @@ import com.group3.backend.datasource.entity.AlertEntity;
 import com.group3.backend.datasource.repos.AlertRepository;
 import com.group3.backend.datasource.repos.EmailRepository;
 import com.group3.backend.service.AlertService;
-import com.group3.backend.service.MedicationCount;
+import com.group3.backend.service.MedicationCountService;
 import com.group3.backend.ui.model.response.AlertResponse;
 
 import com.group3.backend.datasource.entity.MedicationCountEntity;
@@ -20,7 +20,7 @@ public class AlertServiceImpl implements AlertService {
 
     @Autowired private AlertRepository alertRepository;
     
-    @Autowired private MedicationCount medicationCount;
+    @Autowired private MedicationCountService medicationCountService;
 
 	public ArrayList<AlertResponse> getAllAlertsForCareHome(long careHomeId) {
 		ArrayList<AlertResponse> alertsForCareHome = new ArrayList<>();
@@ -34,7 +34,7 @@ public class AlertServiceImpl implements AlertService {
 				
 				//now need to get out the most recent estimate of the count for this medication
 				List<MedicationCountEntity> allCounts = alert.getMedForResident().getMedicationCounts();
-				MedicationCountEntity mostRecentCount = medicationCount.getMostRecentCount(allCounts);
+				MedicationCountEntity mostRecentCount = medicationCountService.getMostRecentCount(allCounts);
 				alertResp.setCycleEndDate(mostRecentCount.getCyclePredictedToEndOn());
 				
 				alertsForCareHome.add(alertResp);

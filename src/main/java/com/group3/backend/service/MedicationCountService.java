@@ -6,6 +6,6 @@ import java.util.List;
 import com.group3.backend.datasource.entity.MedicationCountEntity;
 
 
-public interface MedicationCount {
+public interface MedicationCountService {
 	MedicationCountEntity getMostRecentCount(List<MedicationCountEntity> allCounts);
 }

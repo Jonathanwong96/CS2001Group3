@@ -35,4 +35,15 @@ public class MedicationEntity implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public long getMedicationId() {
+		return medicationId;
+	}
+	public List<MedicationForResidentEntity> getAllResidentsForMedication() {
+		return allResidentsForMedication;
+	}
+	
+
 }

@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.group3.backend.datasource.entity.MedicationCountEntity;
-import com.group3.backend.service.MedicationCount;
+import com.group3.backend.service.MedicationCountService;
 
 @Service
-public class MedicationCountImpl implements MedicationCount {
+public class MedicationCountImpl implements MedicationCountService {
 
 	@Override
 	public MedicationCountEntity getMostRecentCount(List<MedicationCountEntity> allCounts) {
