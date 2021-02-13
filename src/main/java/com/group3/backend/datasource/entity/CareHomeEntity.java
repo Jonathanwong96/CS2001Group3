@@ -66,7 +66,7 @@ public class CareHomeEntity implements Serializable {
 	public void setPharmacies(List<PharmacyEntity> pharmacies) {
 		this.pharmacies = pharmacies;
 	}
-
+	
     public long getCareHomeId() {
 		return careHomeId;
 	}

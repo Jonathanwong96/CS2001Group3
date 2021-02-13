@@ -4,7 +4,11 @@ target
 =======
 target/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 /target/
 =======
 >>>>>>> 86b24b55c393d2b21608bc38a9e3effb6b628cd3
 >>>>>>> 8bdf98d2b863dc41ef854b763783202dbf9c7f15
+=======
+>>>>>>> 86b24b55c393d2b21608bc38a9e3effb6b628cd3
+>>>>>>> 70-resident-profiles

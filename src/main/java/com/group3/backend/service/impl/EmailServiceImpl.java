@@ -193,6 +193,7 @@ public class EmailServiceImpl implements EmailService {
 			List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
 			MedicationCountEntity mostRecentCount = medicationCountService.getMostRecentCount(counts);
 			emailRequest.setCycleEndDate(mostRecentCount.getCyclePredictedToEndOn());
+
 			
 			String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);			
 	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
@@ -253,7 +254,6 @@ public class EmailServiceImpl implements EmailService {
     	}
     	return toReturn;
     }
-
 
 	@Override
 	public EmailResponse medicationIsReady(MedicationOrderStatusRequest medOrderStatusRequest) {

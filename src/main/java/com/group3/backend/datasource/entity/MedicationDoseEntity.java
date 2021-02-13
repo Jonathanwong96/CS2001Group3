@@ -38,7 +38,7 @@ public class MedicationDoseEntity {
 	public void setDose(String dose) {
 		this.dose = dose;
 	}
-
+	
 	public String getRepetition() {
 		return repetition;
 	}
