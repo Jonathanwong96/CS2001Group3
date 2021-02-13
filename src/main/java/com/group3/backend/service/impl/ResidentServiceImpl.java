@@ -72,4 +72,17 @@ public class ResidentServiceImpl implements ResidentService {
         }
         return toReturn;
     }
+
+	@Override
+	public ResidentResponse getResident(long residentId) {
+		Optional<ResidentEntity> resp = residentRepository.findById(residentId);
+		if (resp.isEmpty()) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+		} else {
+			ResidentEntity resEntity = resp.get();
+			ResidentResponse resResp = new ResidentResponse();
+            BeanUtils.copyProperties(resEntity, resResp);
+            return resResp;
+		}
+	}
 }

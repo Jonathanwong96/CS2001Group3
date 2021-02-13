@@ -36,9 +36,14 @@ public class ResidentController {
 		return residentService.editResident(residentRequest);
 	}
 	
-	@GetMapping
-    public ArrayList<ResidentResponse> getAllPharmaciesForHome(@RequestParam long careHomeId) {
+	@GetMapping(path="all")
+    public ArrayList<ResidentResponse> getAllResidentsForHome(@RequestParam long careHomeId) {
         return residentService.getAllResidentsForHome(careHomeId);
     }
+	
+	@GetMapping
+	public ResidentResponse getResident(@RequestParam long residentId) {
+		return residentService.getResident(residentId);
+	}
 	
 }
