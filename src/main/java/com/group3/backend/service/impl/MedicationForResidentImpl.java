@@ -22,11 +22,13 @@ import com.group3.backend.datasource.repos.ResidentRepository;
 import com.group3.backend.service.MedicationDoseService;
 import com.group3.backend.service.MedicationForResidentService;
 import com.group3.backend.service.MedicationService;
+import com.group3.backend.service.ResidentService;
 import com.group3.backend.service.helper.DateHelper;
 import com.group3.backend.ui.model.request.AddMedicationRequest;
 import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.MedicationDoseResponse;
 import com.group3.backend.ui.model.response.MedicationForResidentResponse;
+import com.group3.backend.ui.model.response.ResidentResponse;
 
 @Service
 public class MedicationForResidentImpl implements MedicationForResidentService {
@@ -36,6 +38,8 @@ public class MedicationForResidentImpl implements MedicationForResidentService {
 	@Autowired MedicationDoseService medicationDoseService;
 	
 	@Autowired MedicationRepository medicationRepository;
+	
+	@Autowired ResidentService residentService;
 	
 	@Autowired ResidentRepository residentRepository;
 	
@@ -91,11 +95,13 @@ public class MedicationForResidentImpl implements MedicationForResidentService {
 	public ArrayList<MedicationDoseResponse> getResidentsUpcommingDoses(long residentId) {
 		ArrayList<MedicationDoseResponse> allUpcommingDoses = new ArrayList<>();
 		
+		ResidentResponse resResp = residentService.getResident(residentId);
+		
 		ArrayList<MedicationForResidentEntity> allMedForRes = medicationForResidentRepository.findAllByResidentResidentId(residentId);
 		for (MedicationForResidentEntity medForRes: allMedForRes) {
 			List<MedicationDoseEntity> medDoses = medForRes.getMedicationDoses();
 			for (MedicationDoseEntity dose: medDoses) {
-				Date nextDue = findFirstDateTodayOrLater(dose);
+				Date nextDue = findFirstDateTodayOrLater(dose.getTimeToTake(), dose.getRepetition());
 				dose.setTimeToTake(nextDue); //so that next time we try this we don't have to add days from when the original record was added.
 				
 				MedicationDoseResponse medDoseResp = new MedicationDoseResponse();
@@ -104,6 +110,7 @@ public class MedicationForResidentImpl implements MedicationForResidentService {
 				medDoseResp.setResidentId(residentId);
 				medDoseResp.setTime(nextDue);
 				medDoseResp.setRepeats(dose.getRepetition());
+				medDoseResp.setResidentName(resResp.getFullName());
 				allUpcommingDoses.add(medDoseResp);
 			}
 		}
@@ -124,24 +131,23 @@ public class MedicationForResidentImpl implements MedicationForResidentService {
 	}
 	
 	
-	private Date findFirstDateTodayOrLater(MedicationDoseEntity medDose) {
+	public Date findFirstDateTodayOrLater(Date timeToTake, String repeatFrequency) {
 		Date startOfToday = DateHelper.getStartOfDayXDaysInAdvance(0);
-		Date todayOrLater = medDose.getTimeToTake(); 
 		
 		int daysToAdd;
-		if (medDose.getRepetition().equals("Every day")) {
+		if (repeatFrequency.equals("Every day")) {
 			daysToAdd = 1;
-		} else if (medDose.getRepetition().equals("Every 2 days")) {
+		} else if (repeatFrequency.equals("Every 2 days")) {
 			daysToAdd = 2;
-		} else if (medDose.getRepetition().equals("Every 3 days")) {
+		} else if (repeatFrequency.equals("Every 3 days")) {
 			daysToAdd = 3;
 		} else {
 			daysToAdd = 7;
 		}
-		while (todayOrLater.before(startOfToday)) {
-			todayOrLater = DateHelper.addDays(medDose.getTimeToTake(), daysToAdd);
+		while (timeToTake.before(startOfToday)) {
+			timeToTake = DateHelper.addDays(timeToTake, daysToAdd);
 		}
-		return todayOrLater;
+		return timeToTake;
 	}
 	
 	

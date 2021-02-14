@@ -69,4 +69,7 @@ public class ResidentResponse {
 		this.operationMessage = operationMessage;
 	}
 
+	public String getFullName() {
+		return this.firstName + " " + this.surName;
+	}
 }
