@@ -57,14 +57,14 @@ public class AutomaticEmailServiceImpl implements AutomaticEmailService {
 	}
 
 
-	//TODO: waiting on alerts work to be completed
+	//  waiting on alerts work to be completed
 	public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
 		//first get out all carehomes with auto emails enabled
-		ArrayList<AutomaticEmailEntity> careHomes = automaticEmailRepository.findAllByUsesAutomaticEmails(true);
-		for (AutomaticEmailEntity careHomeWithAutoEmails: careHomes) {
-			//then get out all alerts for that carehome
-			//loop through that and send an email for each new alert.			
-		}
+		//ArrayList<AutomaticEmailEntity> careHomes = automaticEmailRepository.findAllByUsesAutomaticEmails(true);
+		// for (AutomaticEmailEntity careHomeWithAutoEmails: careHomes) {
+		// 	//then get out all alerts for that carehome
+		// 	//loop through that and send an email for each new alert.			
+		// }
 		return null;
 	}
 	

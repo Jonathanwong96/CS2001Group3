@@ -9,7 +9,7 @@ import com.group3.backend.datasource.entity.ResidentEntity;
 import com.group3.backend.datasource.repos.AlertRepository;
 import com.group3.backend.datasource.repos.CareHomeRepository;
 import com.group3.backend.datasource.repos.EmailRepository;
-import com.group3.backend.datasource.repos.MedicationForResidentRepository;
+//import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 import com.group3.backend.service.EmailService;
 import com.group3.backend.service.helper.DateHelper;
 import com.group3.backend.service.helper.EmailMedicationReadyTemplate;
@@ -21,11 +21,11 @@ import com.group3.backend.ui.model.response.EmailResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.EmailStatusResponse;
 import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
-import com.group3.backend.ui.model.request.NewEmailRequest;
+//import com.group3.backend.ui.model.request.NewEmailRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,10 +34,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+//import java.time.LocalDateTime;
+//import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
+//import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +58,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private EmailRepository emailRepository;
     
-    @Autowired private MedicationForResidentRepository medForResRepository;
+ //   @Autowired private MedicationForResidentRepository medForResRepository;
     @Autowired private AlertRepository alertRepository;
     @Autowired private CareHomeRepository careHomeRepository;
     

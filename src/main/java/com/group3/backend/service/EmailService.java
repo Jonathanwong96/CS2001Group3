@@ -2,7 +2,7 @@ package com.group3.backend.service;
 
 import java.util.ArrayList;
 
-import com.group3.backend.datasource.entity.EmailEntity;
+//import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
 import com.group3.backend.ui.model.response.EmailContentResponse;

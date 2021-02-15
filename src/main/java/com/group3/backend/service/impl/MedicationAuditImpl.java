@@ -1,12 +1,13 @@
 package com.group3.backend.service.impl;
 
-import java.util.List;
+import java.util.ArrayList;
+//import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group3.backend.datasource.entity.MedicationAuditEntity;
+import com.group3.backend.datasource.entity.MedicationCountEntity;
 import com.group3.backend.datasource.repos.MedicationAuditRepository;
 import com.group3.backend.service.MedicationAuditService;
 import com.group3.backend.ui.model.request.MedicationAuditRequest;
@@ -19,18 +20,18 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    MedicationAuditRepository medicationAuditRepository;
 
 	    @Override
-	    public List<MedicationAuditEntity> findAll(){
+	    public ArrayList<MedicationCountEntity> findAll(){
 
-	    	return (List<MedicationAuditEntity>) medicationAuditRepository.findAll();
+	    	return (ArrayList<MedicationCountEntity>) medicationAuditRepository.findAll();
 	    }
 
 	    @Override
 	    public MedicationAuditResponse createAudit(MedicationAuditRequest medicationAuditRequest) {
 
 	    	MedicationAuditResponse toReturn = new MedicationAuditResponse();
-	    	MedicationAuditEntity auditEntity = new MedicationAuditEntity();
+	    	MedicationCountEntity auditEntity = new MedicationCountEntity();
 	        BeanUtils.copyProperties(medicationAuditRequest, auditEntity); //copy from request to the new instance created
-	        MedicationAuditEntity savedAudit = medicationAuditRepository.save(auditEntity);
+	        MedicationCountEntity savedAudit = medicationAuditRepository.save(auditEntity);
 	        BeanUtils.copyProperties(savedAudit, toReturn);
 
 	        return toReturn;

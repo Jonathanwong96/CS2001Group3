@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.group3.backend.datasource.entity.EmailEntity;
-import com.group3.backend.service.helper.EmailStatus;
+//import com.group3.backend.service.helper.EmailStatus;
 
 @Repository
 public interface EmailRepository extends CrudRepository<EmailEntity, Long> {

@@ -4,15 +4,15 @@ package com.group3.backend.datasource.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
+//import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+//import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+//import javax.persistence.JoinColumn;
+//import javax.persistence.ManyToOne;
 
-@Entity(name="medication_count")
+@Entity
 public class MedicationAuditEntity implements Serializable  {
 
     private static final long serialVersionUID = 3991032399210763160L;
@@ -26,9 +26,7 @@ public class MedicationAuditEntity implements Serializable  {
 	private Date cyclePredictedToEndOn;
 	private int count;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "medForResId")
-    private MedicationForResidentEntity medicationForResident;
+    
     
     public MedicationAuditEntity() {
 
@@ -67,9 +65,7 @@ public class MedicationAuditEntity implements Serializable  {
 		this.count = count;
 	}
 	
-	public MedicationForResidentEntity getMedicationForResidentEntity() {
-		return this.medicationForResident;
-	}
+	
 
 
 }
