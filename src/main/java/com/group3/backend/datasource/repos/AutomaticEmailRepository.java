@@ -9,6 +9,7 @@ import com.group3.backend.datasource.entity.AutomaticEmailEntity;
 
 @Repository
 public interface AutomaticEmailRepository extends CrudRepository<AutomaticEmailEntity, Long>  {
+	
 	AutomaticEmailEntity findByCareHomeId(long careHomeId);
 	ArrayList<AutomaticEmailEntity> findAllByUsesAutomaticEmails(boolean usesAutomaticEmails);
 }
