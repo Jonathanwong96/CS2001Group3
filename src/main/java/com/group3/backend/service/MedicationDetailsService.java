@@ -9,10 +9,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.group3.backend.datasource.entity.CareHomeEntity;
 import com.group3.backend.datasource.entity.EmailEntity;
+import com.group3.backend.datasource.entity.MedicationCountEntity;
 import com.group3.backend.datasource.entity.MedicationEntity;
 import com.group3.backend.datasource.entity.MedicationForResidentEntity;
 import com.group3.backend.datasource.entity.ResidentEntity;
@@ -20,6 +22,7 @@ import com.group3.backend.datasource.repos.MedicationDetailsRepository;
 import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 import com.group3.backend.datasource.repos.MedicationRepository;
 import com.group3.backend.datasource.repos.ResidentRepository;
+import com.group3.backend.service.impl.MedicationCountImpl;
 import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.MedicationDetailsResponse;
 
@@ -37,8 +40,12 @@ public class MedicationDetailsService {
 	@Autowired MedicationForResidentRepository resMedRepo;
     @Autowired 
     private ResidentRepository resRepo;
+    
+   
+  
+    
 
-    public MedicationDetailsResponse getPatientMedicationDetails(long medForResId) {
+    public MedicationDetailsResponse getPatientMedicationDetails(@RequestParam long medForResId) {
     	Optional<MedicationForResidentEntity> resp = resMedRepo.findById(medForResId);
 		if (resp.isEmpty()) {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
@@ -47,10 +54,12 @@ public class MedicationDetailsService {
 			MedicationEntity medEnt = medResEnt.getMedication();
 			MedicationDetailsResponse medRes = new MedicationDetailsResponse();
 			
-			
 			medRes.setDescription(medEnt.getDescription());
-			//medRes.setMedicationCount(medResEnt.getMedicationCounts());
 			
+			medRes.setMedicationCount(medResEnt.getMedicationCounts().get((int) medForResId).getCount());
+			
+			
+			medRes.setDosage(medRes.getDosage());
 			if (medResEnt.getPharmacy() != null) {
 				medRes.setPharmacyName(medResEnt.getPharmacy().getName());
 			}
