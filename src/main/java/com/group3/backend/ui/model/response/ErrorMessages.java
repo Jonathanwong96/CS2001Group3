@@ -7,7 +7,8 @@ public enum ErrorMessages {
 	NOT_RIGHT_STEP("Email status not at right step to do this action"),
 	SENDING_TOO_SOON("Need to wait at least 1 day before this email can be resent."),
 	ALERT_HAS_EMAIL("This alert already has an email associated with it."),
-	CANNOT_STORE("Unable to store this file.");
+	CANNOT_STORE("Unable to store this file."),
+	CANNOT_LOAD("Unable to load this resource");
 	
 	private String errorMessage;
 	

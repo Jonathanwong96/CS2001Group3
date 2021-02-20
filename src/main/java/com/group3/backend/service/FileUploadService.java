@@ -9,16 +9,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface FileUploadService {
-	void init();
-
-	FileResponse store(MultipartFile file);
-
-	//Stream<Path> loadAll();
-
-	//Path load(String filename);
-
-	//Resource loadAsResource(String filename);
-
-	//void deleteAll();
+	FileResponse store(MultipartFile file, long id, boolean isResident);
+	//Resource load(long id, boolean isResident);
 
 }
