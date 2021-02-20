@@ -7,6 +7,7 @@ public class MedicationDoseResponse {
 	private String dose;
 	private Date time;
 	private long residentId;
+	private String residentName;
 	private String repeats;
 	
 	public String getMedicationName() {
@@ -38,5 +39,11 @@ public class MedicationDoseResponse {
 	}
 	public void setRepeats(String repeats) {
 		this.repeats = repeats;
+	}
+	public String getResidentName() {
+		return residentName;
+	}
+	public void setResidentName(String residentName) {
+		this.residentName = residentName;
 	}
 }

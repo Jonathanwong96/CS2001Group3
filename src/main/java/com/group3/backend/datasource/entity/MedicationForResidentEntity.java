@@ -68,7 +68,7 @@ public class MedicationForResidentEntity implements Serializable {
 	public List<MedicationDoseEntity> getMedicationDoses() {
 		return medicationDoses;
 	}
-    
+	
     public long getMedForResId() {
 		return medForResId;
 	}

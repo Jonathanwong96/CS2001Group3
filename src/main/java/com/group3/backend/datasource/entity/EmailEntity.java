@@ -101,7 +101,6 @@ public class EmailEntity implements Serializable {
 	}
 	public void setAlertCreatedFrom(AlertEntity alertCreatedFrom) {
 		this.alertCreatedFrom = alertCreatedFrom;
-	}
-	
+	}	
     
 }

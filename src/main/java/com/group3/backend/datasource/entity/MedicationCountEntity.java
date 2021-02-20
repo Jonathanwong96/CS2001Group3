@@ -63,5 +63,4 @@ public class MedicationCountEntity implements Serializable, Comparable<Medicatio
 		return that.getCountDoneOnDate().compareTo(this.getCountDoneOnDate());
 	}
 	
-	
 }

@@ -45,5 +45,4 @@ public class MedicationEntity implements Serializable {
 		return allResidentsForMedication;
 	}
 	
-
 }

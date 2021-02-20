@@ -1,7 +1,6 @@
 package com.group3.backend.datasource.repos;
 
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 
 import org.springframework.data.repository.CrudRepository;

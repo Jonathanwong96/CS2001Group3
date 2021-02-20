@@ -8,7 +8,8 @@ public enum ErrorMessages {
 	SENDING_TOO_SOON("Need to wait at least 1 day before this email can be resent."),
 	ALERT_HAS_EMAIL("This alert already has an email associated with it."),
 	CANNOT_STORE("Unable to store this file."),
-	CANNOT_LOAD("Unable to load this resource");
+	CANNOT_LOAD("Unable to load this resource"),
+	RESIDENT_NOT_FOUND("Resident by ID not found");
 	
 	private String errorMessage;
 	
