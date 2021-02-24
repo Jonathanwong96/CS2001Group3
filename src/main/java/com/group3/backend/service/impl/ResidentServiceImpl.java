@@ -1,7 +1,6 @@
 package com.group3.backend.service.impl;
 import com.group3.backend.datasource.entity.ResidentEntity;
 import com.group3.backend.datasource.entity.CareHomeEntity;
-
 import com.group3.backend.datasource.repos.ResidentRepository;
 import com.group3.backend.datasource.repos.CareHomeRepository;
 
@@ -12,6 +11,7 @@ import com.group3.backend.ui.model.response.ErrorMessages;
 import com.group3.backend.ui.model.response.ResidentResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +36,15 @@ public class ResidentServiceImpl implements ResidentService {
     	ResidentResponse toReturn = new ResidentResponse();
     	ResidentEntity residentEntity = new ResidentEntity();
         BeanUtils.copyProperties(residentRequest, residentEntity);
+        
+        // dummy care home for local DB by id=7
+    	Optional<CareHomeEntity> resp = careHomeRepository.findById((long) 7);
+        CareHomeEntity defHome = resp.get();
+        residentEntity.setCareHome(defHome);
+        
         BeanUtils.copyProperties(residentRepository.save(residentEntity), toReturn);
         toReturn.setOperationMessage("resident added");
+        toReturn.setCareHomeId(residentEntity.getCareHome().getCareHomeId());
         return toReturn;
     }
     
@@ -54,9 +61,29 @@ public class ResidentServiceImpl implements ResidentService {
     	}
     	else {
     		throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.RESIDENT_NOT_FOUND.getErrorMessage());
-
     	}
     }
+    
+    @Override
+	public Object deleteResident(long residentId) {
+    	if (residentRepository.existsById(residentId)) {
+    		Optional<ResidentEntity> resEnt = residentRepository.findById(residentId);
+        	ResidentEntity residentEntity = resEnt.get();
+        	if (residentEntity.isArchived()) {
+        		//?enter a passcode request for extra security?
+        		residentRepository.deleteById(residentId);
+        		// credit : https://stackoverflow.com/a/30895501/13242162
+            	return Collections.singletonMap("operationMessage", "Resident profile by ID #"+residentId+" was deleted");
+        	}
+        	else {
+        		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.DELETE_ERROR.getErrorMessage());
+        	}
+        	
+    	}
+    	else {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+    	}
+	}
     
     @Override
     public ArrayList<ResidentResponse> getAllResidentsForHome(long careHomeId) {
