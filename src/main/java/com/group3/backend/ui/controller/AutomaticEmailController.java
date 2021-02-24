@@ -35,13 +35,7 @@ public class AutomaticEmailController {
     	return automaticEmailService.updateAutomaticEmail(autoEmailRequest);
     }
     
-    @PostMapping
-    public AutomaticEmailResponse createAutomaticEmail(@RequestBody AutomaticEmailRequest autoEmailRequest) {
-    	//for now just sending the emailRequest with all fields. Once logins are introduced can reduce the fields that emailRequest accepts and get them from the user jwt.
-    	return automaticEmailService.createAutomaticEmail(autoEmailRequest);
-    }
-    
-    @GetMapping(path="new-medication-requests")
+    @GetMapping(path="send-emails-for-alerts")
     public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
     	return automaticEmailService.sendEmailsForAllNewAlerts();
     }

@@ -27,7 +27,6 @@ public class ResidentEntity {
 	private String bio;
 	private boolean archived = false;
 	
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "carehomeId")
 	private CareHomeEntity careHome;
@@ -40,7 +39,7 @@ public class ResidentEntity {
 	}
 	public void setArchived(boolean archived) {
 		this.archived = archived;
-	}	
+	}
 	public Long getResidentId() {
 		return residentId;
 	}

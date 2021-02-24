@@ -16,11 +16,10 @@ public class CareHomeEntity implements Serializable {
 	@Id
     @GeneratedValue
     private long careHomeId;
-    
 
 	private String name;
     private String email;
-    private boolean usesAutoEmail;
+    private boolean usesAutoEmail = false;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<ResidentEntity> residents;
@@ -82,4 +81,5 @@ public class CareHomeEntity implements Serializable {
 	public void setPharmacies(List<PharmacyEntity> pharmacies) {
 		this.pharmacies = pharmacies;
 	}
+
 }
