@@ -37,8 +37,11 @@ public class ResidentServiceImpl implements ResidentService {
     	ResidentEntity residentEntity = new ResidentEntity();
         BeanUtils.copyProperties(residentRequest, residentEntity);
         
-        // dummy care home for local DB by id=7
-    	Optional<CareHomeEntity> resp = careHomeRepository.findById((long) 7);
+        Optional<CareHomeEntity> resp = careHomeRepository.findById(residentRequest.getCareHomeId());
+        if (resp.isEmpty()) {
+        	throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.RESIDENT_NOT_FOUND.getErrorMessage());
+        }
+        
         CareHomeEntity defHome = resp.get();
         residentEntity.setCareHome(defHome);
         
