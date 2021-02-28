@@ -7,8 +7,6 @@ import java.util.Set;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import com.group3.backend.ui.model.request.ResidentRequest;
-
 public class Utility {
 	/**
 	    * Creates a String array of the properties' names that are either null or 0
@@ -19,13 +17,13 @@ public class Utility {
 	    * @param source(ResidentRequest)
 	    * @return String[] of null or equal to 0 property names
 	    */
-	    public static String[] getNullPropertyNames(ResidentRequest residentRequest) {
-	        final BeanWrapper resReq = new BeanWrapperImpl(residentRequest);
-	        PropertyDescriptor[] pds = resReq.getPropertyDescriptors();
+	    public static String[] getNullPropertyNames(Object request) {
+	        final BeanWrapper req = new BeanWrapperImpl(request);
+	        PropertyDescriptor[] pds = req.getPropertyDescriptors();
 	        
 	        Set<String> emptyNames = new HashSet<String>();
 	        for (PropertyDescriptor pd : pds) {
-	            Object srcValue = resReq.getPropertyValue(pd.getName());
+	            Object srcValue = req.getPropertyValue(pd.getName());
 	            if (srcValue == null || srcValue.equals(0) )
 	                emptyNames.add(pd.getName());
 	        }

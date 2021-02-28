@@ -23,8 +23,11 @@ public class CareHomeEntity implements Serializable {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<ResidentEntity> residents;
-
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
+    private List<CareWorkerEntity> careWorkers;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<PharmacyEntity> pharmacies;
     
 	public List<ResidentEntity> getResidents() {
@@ -35,6 +38,14 @@ public class CareHomeEntity implements Serializable {
 		this.residents = residents;
 	}
 
+	public List<CareWorkerEntity> getCareWorkers() {
+		return careWorkers;
+	}
+
+	public void setCareWorkers(List<CareWorkerEntity> careWorkers) {
+		this.careWorkers = careWorkers;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -10,4 +10,5 @@ public interface ResidentService {
     ResidentResponse editResident(ResidentRequest residentRequest);
     ArrayList<ResidentResponse> getAllResidentsForHome(long careHomeId);
     ResidentResponse getResident(long residentId);
+	Object deleteResident(long residentId);
 }

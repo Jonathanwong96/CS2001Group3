@@ -9,7 +9,8 @@ public enum ErrorMessages {
 	ALERT_HAS_EMAIL("This alert already has an email associated with it."),
 	CANNOT_STORE("Unable to store this file."),
 	CANNOT_LOAD("Unable to load this resource"),
-	RESIDENT_NOT_FOUND("Resident by ID not found");
+	RESIDENT_NOT_FOUND("Resident by ID not found"),
+	DELETE_ERROR("Profile must be archived before deletion");
 	
 	private String errorMessage;
 	
