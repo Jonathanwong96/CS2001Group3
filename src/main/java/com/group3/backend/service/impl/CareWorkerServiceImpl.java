@@ -35,12 +35,15 @@ public class CareWorkerServiceImpl implements CareWorkerService {
     	CareWorkerEntity careWorkerEntity = new CareWorkerEntity();
         BeanUtils.copyProperties(careWorkerRequest, careWorkerEntity);
         
-        // dummy care home for local DB by id=7
-    	Optional<CareHomeEntity> resp = careHomeRepository.findById((long) 7);
+        Optional<CareHomeEntity> resp = careHomeRepository.findById(careWorkerRequest.getCareHomeId());
+        if (resp.isEmpty()) {
+        	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+        }
         CareHomeEntity defHome = resp.get();
         careWorkerEntity.setCareHome(defHome);
         
-        BeanUtils.copyProperties(careWorkerRepository.save(careWorkerEntity), toReturn);
+        CareWorkerEntity savedWorker = careWorkerRepository.save(careWorkerEntity);
+        BeanUtils.copyProperties(savedWorker, toReturn);
         toReturn.setOperationMessage("Care worker added");
         toReturn.setCareHomeId(careWorkerEntity.getCareHome().getCareHomeId());
         return toReturn;
