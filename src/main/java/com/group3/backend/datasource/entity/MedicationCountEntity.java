@@ -18,8 +18,7 @@ public class MedicationCountEntity implements Serializable {
 
 	@Id
     @GeneratedValue
-    private long medCountId;
-	
+    private Long medCountId;
 	private boolean isMorningCount; //if not morning count, will be the evening count
 	private Date countDoneOnDate;
 	private Date cyclePredictedToEndOn;
@@ -56,5 +55,12 @@ public class MedicationCountEntity implements Serializable {
 	
 	public MedicationForResidentEntity getMedicationForResidentEntity() {
 		return this.medicationForResident;
+	}
+
+	public Long getMedCountId(){
+		return medCountId;
+	}
+	public void setMedCountId(Long medCountId){
+		this.medCountId = medCountId;
 	}
 }

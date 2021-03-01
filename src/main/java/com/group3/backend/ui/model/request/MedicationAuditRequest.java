@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class MedicationAuditRequest {
 
-	private long medCountId;
+	private Long medCountId;
 	private boolean isMorningCount; //if not morning count, will be the evening count
 	private Date countDoneOnDate;
 	private Date cyclePredictedToEndOn;
 	private int count;
 
-	public long medCountId(){
+	public Long getMedCountId(){
 		return medCountId;
 	}
-	public void setMedCountId(long medCountId){
+	public void setMedCountId(Long medCountId){
 		this.medCountId = medCountId;
 	}
 
-	public boolean isMorningCount() {
+	public boolean getIsMorningCount() {
 		return isMorningCount;
 	}
 	public void setMorningCount(boolean isMorningCount) {
