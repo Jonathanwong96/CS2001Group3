@@ -9,5 +9,5 @@ import com.group3.backend.datasource.entity.ResidentEntity;
 
 @Repository
 public interface ResidentRepository extends CrudRepository<ResidentEntity, Long> {
-    List<ResidentEntity> findById(long residentId);
+    List<ResidentEntity> findByCareHomeCareHomeId(long careHomeId);
 }

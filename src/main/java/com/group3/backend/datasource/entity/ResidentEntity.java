@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,6 +25,7 @@ public class ResidentEntity {
 	private int age;
 	private String guardianName;
 	private String bio;
+	private boolean archived = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "carehomeId")
@@ -34,8 +34,12 @@ public class ResidentEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "resident")
 	private List<MedicationForResidentEntity> allMedicationsForResident;
 	
-	
-	
+	public boolean isArchived() {
+		return archived;
+	}
+	public void setArchived(boolean archived) {
+		this.archived = archived;
+	}
 	public Long getResidentId() {
 		return residentId;
 	}
