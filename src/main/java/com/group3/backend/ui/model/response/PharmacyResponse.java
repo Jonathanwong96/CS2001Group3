@@ -4,25 +4,8 @@ public class PharmacyResponse {
     private String email;
     private String address;
     private String phoneNumb;
-    private Long careHomeId;
-    private boolean isDefault = false;
     private String name;
-
-    public Long getCareHomeId() {
-        return careHomeId;
-    }
-
-    public void setCareHomeId(Long careHomeId) {
-        this.careHomeId = careHomeId;
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
+    private long pharmacyId;
 
     public String getName() {
         return name;
@@ -55,4 +38,12 @@ public class PharmacyResponse {
     public void setPhoneNumb(String phoneNumb) {
         this.phoneNumb = phoneNumb;
     }
+
+	public long getPharmacyId() {
+		return pharmacyId;
+	}
+
+	public void setPharmacyId(long pharmacyId) {
+		this.pharmacyId = pharmacyId;
+	}
 }

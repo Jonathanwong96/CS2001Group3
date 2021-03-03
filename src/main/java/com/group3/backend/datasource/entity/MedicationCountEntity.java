@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 //import javax.persistence.OneToOne;
 
 @Entity(name="medication_count")
-public class MedicationCountEntity implements Serializable {
+public class MedicationCountEntity implements Serializable, Comparable<MedicationCountEntity> {
 	private static final long serialVersionUID = 3991032399210763160L;
 
 	@Id
@@ -56,11 +56,16 @@ public class MedicationCountEntity implements Serializable {
 	public MedicationForResidentEntity getMedicationForResidentEntity() {
 		return this.medicationForResident;
 	}
-
 	public Long getMedCountId(){
 		return medCountId;
 	}
 	public void setMedCountId(Long medCountId){
 		this.medCountId = medCountId;
 	}
+	
+	@Override
+	public int compareTo(MedicationCountEntity that) {
+		return that.getCountDoneOnDate().compareTo(this.getCountDoneOnDate());
+	}
+	
 }

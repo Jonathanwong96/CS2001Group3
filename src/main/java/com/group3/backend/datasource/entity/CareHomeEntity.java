@@ -16,15 +16,18 @@ public class CareHomeEntity implements Serializable {
 	@Id
     @GeneratedValue
     private long careHomeId;
-    
-    private String name;
+
+	private String name;
     private String email;
-    private boolean usesAutoEmail;
+    private boolean usesAutoEmail = false;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<ResidentEntity> residents;
-
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
+    private List<CareWorkerEntity> careWorkers;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<PharmacyEntity> pharmacies;
     
 	public List<ResidentEntity> getResidents() {
@@ -35,6 +38,14 @@ public class CareHomeEntity implements Serializable {
 		this.residents = residents;
 	}
 
+	public List<CareWorkerEntity> getCareWorkers() {
+		return careWorkers;
+	}
+
+	public void setCareWorkers(List<CareWorkerEntity> careWorkers) {
+		this.careWorkers = careWorkers;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -65,5 +76,13 @@ public class CareHomeEntity implements Serializable {
 
 	public void setPharmacies(List<PharmacyEntity> pharmacies) {
 		this.pharmacies = pharmacies;
+	}
+	
+    public long getCareHomeId() {
+		return careHomeId;
+	}
+
+	public void setCareHomeId(long careHomeId) {
+		this.careHomeId = careHomeId;
 	}
 }

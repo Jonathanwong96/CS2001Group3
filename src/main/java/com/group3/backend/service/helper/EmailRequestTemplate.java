@@ -256,7 +256,7 @@ public class EmailRequestTemplate {
 			"\n" + 
 			"</body></html>";
 
-	public String getTemplate() {
+	private String getTemplate() {
 		return template;
 	}
 	

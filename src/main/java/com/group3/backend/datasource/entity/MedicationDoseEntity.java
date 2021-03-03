@@ -17,6 +17,7 @@ public class MedicationDoseEntity {
     
     private Date timeToTake;
     private String dose;
+    private String repetition;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medForResId")
@@ -36,5 +37,21 @@ public class MedicationDoseEntity {
 
 	public void setDose(String dose) {
 		this.dose = dose;
+	}
+	
+	public String getRepetition() {
+		return repetition;
+	}
+
+	public void setRepetition(String repetition) {
+		this.repetition = repetition;
+	}
+
+	public MedicationForResidentEntity getMedicationforResident() {
+		return medicationforResident;
+	}
+
+	public void setMedicationforResident(MedicationForResidentEntity medicationforResident) {
+		this.medicationforResident = medicationforResident;
 	}
 }

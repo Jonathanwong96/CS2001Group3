@@ -37,7 +37,6 @@ public class EmailEntity implements Serializable {
 	@JoinColumn(name = "pharmacyId")
 	private PharmacyEntity pharmacySentTo;
 	
-	
 	public String getNonGuessableId() {
 		return nonGuessableId;
 	}
@@ -102,8 +101,6 @@ public class EmailEntity implements Serializable {
 	}
 	public void setAlertCreatedFrom(AlertEntity alertCreatedFrom) {
 		this.alertCreatedFrom = alertCreatedFrom;
-	}
-
-	
+	}	
     
 }

@@ -6,13 +6,12 @@ import com.group3.backend.datasource.entity.MedicationEntity;
 import com.group3.backend.ui.model.request.MedicationRequest;
 import com.group3.backend.ui.model.response.MedicationResponse;
 
+import java.util.ArrayList;
 
+import com.group3.backend.datasource.entity.MedicationEntity;
+import com.group3.backend.ui.model.response.MedicationResponse;
 
 public interface MedicationService {
-	
-	List<MedicationEntity> findAll(long Id);
-	MedicationResponse createMedication(MedicationRequest medication);
-
-//	MedicationResponse updateMedication(MedicationRequest medicationLog);
-
+	ArrayList<MedicationResponse> getAllMedicationsForCareHome(long careHomeId);
+	MedicationEntity addMedication(String name, String desc);
 }

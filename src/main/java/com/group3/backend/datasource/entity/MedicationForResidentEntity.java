@@ -27,7 +27,7 @@ public class MedicationForResidentEntity implements Serializable {
     @JoinColumn(name = "medicationId")
     private MedicationEntity medication;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pharmacyId")
     private PharmacyEntity pharmacy;
     
@@ -68,5 +68,20 @@ public class MedicationForResidentEntity implements Serializable {
 	public List<MedicationDoseEntity> getMedicationDoses() {
 		return medicationDoses;
 	}
-    
+	
+    public long getMedForResId() {
+		return medForResId;
+	}
+
+	public void setResident(ResidentEntity resident) {
+		this.resident = resident;
+	}
+
+	public void setMedication(MedicationEntity medication) {
+		this.medication = medication;
+	}
+
+	public void setPharmacy(PharmacyEntity pharmacy) {
+		this.pharmacy = pharmacy;
+	}
 }
