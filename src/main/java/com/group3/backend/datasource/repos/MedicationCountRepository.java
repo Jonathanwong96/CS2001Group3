@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.group3.backend.datasource.entity.MedicationCountEntity;
 
+//using date 
 @Repository
 public interface MedicationCountRepository extends CrudRepository<MedicationCountEntity, Date> {
 	List<MedicationCountEntity> findAllByMedCountId (long medCountId);
