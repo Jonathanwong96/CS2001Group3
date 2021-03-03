@@ -9,6 +9,7 @@ import com.group3.backend.datasource.entity.ResidentEntity;
 import com.group3.backend.datasource.repos.AlertRepository;
 import com.group3.backend.datasource.repos.CareHomeRepository;
 import com.group3.backend.datasource.repos.EmailRepository;
+import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 //import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 import com.group3.backend.service.EmailService;
 import com.group3.backend.service.MedicationCountService;
@@ -38,13 +39,9 @@ import java.text.SimpleDateFormat;
 //import java.time.LocalDateTime;
 //import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-<<<<<<< HEAD
-//import java.util.Calendar;
-=======
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
->>>>>>> Workingbranch
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

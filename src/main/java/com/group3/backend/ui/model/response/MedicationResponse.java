@@ -29,13 +29,6 @@ public class MedicationResponse {
     public void setPrescriptionCount(int prescriptionCount) {
     	this.prescriptionCount = prescriptionCount;
     }
-  
-    public String getDescription() {
-    	return description;
-    }
-    public void setDescription(String description) {
-    	this.description = description;
-    }
 
     public String getMedicationClass() {
     	return medicationClass;

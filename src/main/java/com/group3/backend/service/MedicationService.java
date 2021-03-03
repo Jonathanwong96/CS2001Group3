@@ -13,5 +13,6 @@ import com.group3.backend.ui.model.response.MedicationResponse;
 
 public interface MedicationService {
 	ArrayList<MedicationResponse> getAllMedicationsForCareHome(long careHomeId);
+	ArrayList<MedicationResponse> getAllMedicationsForResident(long residentId);
 	MedicationEntity addMedication(String name, String desc);
 }

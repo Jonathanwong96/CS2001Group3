@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.group3.backend.datasource.entity.MedicationEntity;
-
+import com.group3.backend.datasource.repos.MedicationForResidentRepository;
 import com.group3.backend.datasource.repos.MedicationRepository;
 import com.group3.backend.service.MedicationService;
 import com.group3.backend.ui.model.request.MedicationRequest;
@@ -28,6 +28,7 @@ import com.group3.backend.ui.model.response.MedicationResponse;
 public class MedicationImpl implements MedicationService {
 	
 	@Autowired MedicationRepository medicationRepository;
+	@Autowired MedicationForResidentRepository medForResRepository;
 
 	public ArrayList<MedicationResponse> getAllMedicationsForCareHome(long careHomeId) {
 		ArrayList<MedicationResponse> allMedsForCareHome = new ArrayList<>();
@@ -56,6 +57,23 @@ public class MedicationImpl implements MedicationService {
 		medEntity.setName(name);
 		medEntity.setDescription(desc);
 		return medicationRepository.save(medEntity);
+	}
+
+
+	@Override
+	public ArrayList<MedicationResponse> getAllMedicationsForResident(long residentId) {
+		ArrayList<MedicationResponse> allMedsForResident = new ArrayList<>();
+		
+		ArrayList<MedicationForResidentEntity> medsForRes = medForResRepository.findAllByResidentResidentId(residentId);
+		for (MedicationForResidentEntity med: medsForRes) {
+			MedicationResponse medResp = new MedicationResponse();
+			MedicationEntity medEnt = new MedicationEntity();
+			medResp.setMedicationName(med.getMedication().getName());
+			medResp.setId(med.getId());
+			medResp.setDescription("This id is for the Medication for resident entity - " + med.getId());
+			allMedsForResident.add(medResp);
+		}
+		return allMedsForResident;
 	}
 	
 }
