@@ -1,13 +1,11 @@
 package com.group3.backend.datasource.repos;
 
-//import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
-
-//import com.group3.backend.datasource.entity.MedicationAuditEntity;
 import com.group3.backend.datasource.entity.MedicationCountEntity;
 
 
@@ -17,9 +15,7 @@ public interface MedicationAuditRepository extends CrudRepository<MedicationCoun
     Iterable<MedicationCountEntity> findAll();
     List<MedicationCountEntity> findAllByMedCountId (long medCountId);
 
-    
-
-//		List<MedicationAuditEntity> findAllByName(long name);
-//	    Optional <MedicationAuditEntity> findById(long id);
+//route to get count for past date
+    List<MedicationCountEntity> findByCountDoneOnDate(@Param("countDoneOnDate") Date countDoneOnDate);
 
 }

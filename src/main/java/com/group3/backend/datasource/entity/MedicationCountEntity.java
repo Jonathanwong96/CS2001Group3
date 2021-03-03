@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 //import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name="medication_count")
 public class MedicationCountEntity implements Serializable {
@@ -20,7 +22,11 @@ public class MedicationCountEntity implements Serializable {
     @GeneratedValue
     private Long medCountId;
 	private boolean isMorningCount; //if not morning count, will be the evening count
+
+	@Temporal(TemporalType.DATE)
 	private Date countDoneOnDate;
+	
+	@Temporal(TemporalType.DATE)
 	private Date cyclePredictedToEndOn;
 	private int count;
 

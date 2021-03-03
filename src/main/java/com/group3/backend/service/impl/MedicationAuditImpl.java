@@ -9,11 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group3.backend.datasource.entity.MedicationAuditEntity;
 import com.group3.backend.datasource.entity.MedicationCountEntity;
 import com.group3.backend.datasource.repos.MedicationAuditRepository;
-import com.group3.backend.datasource.repos.MedicationCountRepository;
-//import com.group3.backend.datasource.repos.MedicationCountRepository;
 import com.group3.backend.service.MedicationAuditService;
 import com.group3.backend.ui.model.request.MedicationAuditRequest;
 import com.group3.backend.ui.model.response.MedicationAuditResponse;
@@ -24,7 +21,6 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    
 		@Autowired 
 		MedicationAuditRepository medicationAuditRepository;
-//		MedicationCountRepository medicationCountRepository;
 
 		@Override
 	    public ArrayList<MedicationAuditResponse> getAllAudits(Long medCountId){
@@ -42,18 +38,19 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    	return toReturn;
 	    }
 
-		// @Override
-	    // public ArrayList<MedicationAuditResponse> getAuditDay(Date countDoneOnDate, long medCountId){
-		// 	ArrayList<MedicationAuditResponse> toReturn = new ArrayList<>();
-		// 	List<MedicationCountEntity> allDatesForAudits = medicationCountRepository.findByDate(countDoneOnDate, medCountId);
-		// 	for (MedicationCountEntity mEntity: allDatesForAudits) {
-		// 		MedicationAuditResponse mResponse = new MedicationAuditResponse();
-		// 		BeanUtils.copyProperties(mEntity, mResponse);
-		// 		toReturn.add(mResponse);
-		// 	}
+		@Override
+	    public ArrayList<MedicationAuditResponse> getCounts(Date countDoneOnDate){
+			
+			ArrayList<MedicationAuditResponse> toReturn = new ArrayList<>();
+			List<MedicationCountEntity> allCountForDate = medicationAuditRepository.findByCountDoneOnDate(countDoneOnDate);
+			for (MedicationCountEntity mEntity: allCountForDate) {
+				MedicationAuditResponse mResponse = new MedicationAuditResponse();
+				BeanUtils.copyProperties(mEntity, mResponse);
+				toReturn.add(mResponse);
+			}
 
-	    // 	return toReturn;
-	    // }
+	    	return toReturn;
+	    }
 
 
 	    @Override
