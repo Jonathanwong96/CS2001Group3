@@ -23,8 +23,8 @@ public class MedicationAuditImpl implements MedicationAuditService {
 
 	    
 		@Autowired 
-		MedicationAuditRepository medicationAuditRepository;
-//		MedicationCountRepository medicationCountRepository;
+//		MedicationAuditRepository medicationAuditRepository;
+		MedicationCountRepository medicationCountRepository;
 
 		@Override
 	    public ArrayList<MedicationAuditResponse> getAllAudits(Long medCountId){
@@ -32,7 +32,7 @@ public class MedicationAuditImpl implements MedicationAuditService {
 			//or
 			//use beansUtils 
 			ArrayList<MedicationAuditResponse> toReturn = new ArrayList<>();
-			List<MedicationCountEntity> allAuditsForRes = medicationAuditRepository.findAllByMedCountId(medCountId);
+			List<MedicationCountEntity> allAuditsForRes = medicationCountRepository.findAllByMedCountId(medCountId);
 			for (MedicationCountEntity mEntity: allAuditsForRes) {
 				MedicationAuditResponse mResponse = new MedicationAuditResponse();
 				BeanUtils.copyProperties(mEntity, mResponse);
@@ -62,7 +62,7 @@ public class MedicationAuditImpl implements MedicationAuditService {
 	    	MedicationAuditResponse toReturn = new MedicationAuditResponse();
 	    	MedicationCountEntity auditEntity = new MedicationCountEntity();
 	        BeanUtils.copyProperties(medicationAuditRequest, auditEntity); //copy from request to the new instance created
-	        MedicationCountEntity savedAudit = medicationAuditRepository.save(auditEntity);
+	        MedicationCountEntity savedAudit = medicationCountRepository.save(auditEntity);
 	        BeanUtils.copyProperties(savedAudit, toReturn);
 
 	        return toReturn;

@@ -43,7 +43,7 @@ public class MedicationAuditController {
 	}
 
 	@GetMapping(path ="/show")
-	public ArrayList<MedicationAuditResponse> getAllAudits(@RequestParam(value = "medCountId") long medCountId) {
+	public ArrayList<MedicationAuditResponse> getAllAudits(@RequestParam Long medCountId) {
 		//return arraylist of medication audit response
 		
 		return MedicationAuditService.getAllAudits(medCountId);
