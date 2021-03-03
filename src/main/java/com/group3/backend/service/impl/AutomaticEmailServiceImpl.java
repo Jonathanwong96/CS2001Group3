@@ -62,7 +62,7 @@ public class AutomaticEmailServiceImpl implements AutomaticEmailService {
 	}
 
 
-	//TODO: waiting on alerts work to be completed
+	//  waiting on alerts work to be completed
 	public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
 		ArrayList<EmailResponse> emailsSent = new ArrayList<>();
 		

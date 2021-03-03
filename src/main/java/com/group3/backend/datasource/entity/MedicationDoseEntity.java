@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity(name="medication_dose")
-public class MedicationDoseEntity {
+public class MedicationDoseEntity implements Comparable<MedicationDoseEntity> {
     @Id
     @GeneratedValue
     private long medDoseId;
@@ -53,5 +53,10 @@ public class MedicationDoseEntity {
 
 	public void setMedicationforResident(MedicationForResidentEntity medicationforResident) {
 		this.medicationforResident = medicationforResident;
+	}
+	
+	@Override
+	public int compareTo(MedicationDoseEntity that) {
+		return that.getTimeToTake().compareTo(this.getTimeToTake());
 	}
 }
