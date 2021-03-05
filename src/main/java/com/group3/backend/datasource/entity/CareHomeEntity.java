@@ -29,7 +29,18 @@ public class CareHomeEntity implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
     private List<PharmacyEntity> pharmacies;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="careHome")
+    private List<TaskEntity> tasks;
     
+	public List<TaskEntity> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<TaskEntity> tasks) {
+		this.tasks = tasks;
+	}
+
 	public List<ResidentEntity> getResidents() {
 		return residents;
 	}
