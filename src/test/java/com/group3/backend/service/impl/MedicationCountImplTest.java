@@ -10,23 +10,24 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.group3.backend.datasource.entity.MedicationCountEntity;
 import com.group3.backend.datasource.entity.MedicationForResidentEntity;
 import com.group3.backend.service.helper.DateHelper;
+import com.group3.backend.service.impl.MedicationCountImpl;
 
 
-public class MedicationCountImplTest {
+class MedicationCountImplTest {
 
-	private static MedicationCountImpl medicationCountService;
+	private MedicationCountImpl medicationCountService = new MedicationCountImpl();
 	
 	@Test
-	public static void canGetPredictedEndDate() {
+	public void canGetPredictedEndDate() {
 		MedicationForResidentEntity mForResEnt = new MedicationForResidentEntity();
 		MedicationCountEntity medCountEnt = new MedicationCountEntity();
 		medCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-2)); //2 days ago
 		medCountEnt.setCount(15);
 		medCountEnt.setMorningCount(true);
 		MedicationCountEntity mostRecentMedCountEnt = new MedicationCountEntity();
-		medCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago
-		medCountEnt.setCount(14);
-		medCountEnt.setMorningCount(true);
+		mostRecentMedCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago
+		mostRecentMedCountEnt.setCount(14);
+		mostRecentMedCountEnt.setMorningCount(true);
 		ArrayList<MedicationCountEntity> medCounts = new ArrayList<>();
 		medCounts.add(medCountEnt);
 		medCounts.add(mostRecentMedCountEnt);
@@ -38,7 +39,7 @@ public class MedicationCountImplTest {
 	}
 	
 	@Test
-	public static void returnsNullIfNoData() {
+	public void returnsNullIfNoData() {
 		MedicationForResidentEntity mForResEnt = new MedicationForResidentEntity();
 		ArrayList<MedicationCountEntity> medCounts = new ArrayList<>();
 		mForResEnt.setMedicationCounts(medCounts);
@@ -48,7 +49,7 @@ public class MedicationCountImplTest {
 	}
 	
 	@Test
-	public static void returnsNullIfNoCountForTime() { 
+	public void returnsNullIfNoCountForTime() { 
 		//we only compare times done at the same time of day as that makes the calculation easier - we can assume there is 1 day between each reading
 		MedicationForResidentEntity mForResEnt = new MedicationForResidentEntity();
 		MedicationCountEntity medCountEnt = new MedicationCountEntity();
@@ -56,9 +57,9 @@ public class MedicationCountImplTest {
 		medCountEnt.setCount(15);
 		medCountEnt.setMorningCount(true);
 		MedicationCountEntity mostRecentMedCountEnt = new MedicationCountEntity();
-		medCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago
-		medCountEnt.setCount(14);
-		medCountEnt.setMorningCount(true);
+		mostRecentMedCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago
+		mostRecentMedCountEnt.setCount(14);
+		mostRecentMedCountEnt.setMorningCount(true);
 		ArrayList<MedicationCountEntity> medCounts = new ArrayList<>();
 		medCounts.add(medCountEnt);
 		medCounts.add(mostRecentMedCountEnt);
@@ -69,7 +70,7 @@ public class MedicationCountImplTest {
 	}
 	
 	@Test
-	public static void returnsNullIfWeveJustIncreasedStock() {
+	public void returnsNullIfWeveJustIncreasedStock() {
 		MedicationForResidentEntity mForResEnt = new MedicationForResidentEntity();
 		MedicationCountEntity mostRecentMedCountEnt = new MedicationCountEntity();
 		mostRecentMedCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago
@@ -84,7 +85,7 @@ public class MedicationCountImplTest {
 	}
 	
 	@Test
-	public static void returnsNullIfNoChangeInStock() {
+	public void returnsNullIfNoChangeInStock() {
 		MedicationForResidentEntity mForResEnt = new MedicationForResidentEntity();
 		MedicationCountEntity mostRecentMedCountEnt = new MedicationCountEntity();
 		mostRecentMedCountEnt.setCountDoneOnDate(DateHelper.getStartOfDayXDaysInAdvance(-1)); //1 day ago

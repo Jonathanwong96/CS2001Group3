@@ -35,36 +35,42 @@ public class EmailRepositoryTest {
 	void canGetOutAllNonCollectedMedicationRequests() {
 		//test should get out all uncollected entities tomorrow or earlier
 		
-//		//Commented out as was made for old DB code. Will be updated soon - testing file uploads on remote server atm.
-//		EmailEntity beforeCollected = new EmailEntity();
-//		EmailEntity before = new EmailEntity();
-//		EmailEntity dayAhead = new EmailEntity();
-//		EmailEntity twoDaysAhead = new EmailEntity();
-//		
-//		beforeCollected.setStatus(EmailStatus.COMPLETED.getMessage());
-//		beforeCollected.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-2));
-//		beforeCollected.setNonGuessableId("1");
-//		before.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-1));
-//		before.setNonGuessableId("2");
-//		dayAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(1));
-//		dayAhead.setNonGuessableId("3");
-//		twoDaysAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(2));
-//		twoDaysAhead.setNonGuessableId("4");
-//
-//		emailRepository.save(beforeCollected);
-//		emailRepository.save(before);
-//		emailRepository.save(dayAhead);
-//		emailRepository.save(twoDaysAhead);
-//		
-//		Date midnightTwoDaysAhead = DateHelper.getStartOfDayXDaysInAdvance(2);
-//		ArrayList<EmailEntity> allUncollectedBeforeTwoDaysAhead = emailRepository.findAllReadyBy(midnightTwoDaysAhead);
-//		
-//		assertEquals(2, allUncollectedBeforeTwoDaysAhead.size());
-//		for (EmailEntity emailEntity: allUncollectedBeforeTwoDaysAhead) {
-//			Date medReadyDate = emailEntity.getDatePharmacySaysReady();
-//			assertNotEquals(emailEntity.getStatus(), EmailStatus.COMPLETED.getMessage());
-//			assertTrue(medReadyDate.equals(before.getDatePharmacySaysReady()) 
-//					|| medReadyDate.equals(dayAhead.getDatePharmacySaysReady()));
-//		}
+		EmailEntity beforeCollected = new EmailEntity();
+		EmailEntity before = new EmailEntity();
+		EmailEntity dayAhead = new EmailEntity();
+		EmailEntity dayAheadButInquiry = new EmailEntity();
+		EmailEntity twoDaysAhead = new EmailEntity();
+		
+		beforeCollected.setStatus(EmailStatus.COMPLETED.getMessage());
+		beforeCollected.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-2));
+		beforeCollected.setNonGuessableId("1");
+		before.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(-1));
+		before.setNonGuessableId("2");
+		before.setStatus(EmailStatus.PROCESSING.getMessage());
+		dayAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(1));
+		dayAhead.setNonGuessableId("3");
+		dayAhead.setStatus(EmailStatus.PROCESSING.getMessage());
+		dayAheadButInquiry.setNonGuessableId("35");
+		dayAheadButInquiry.setStatus(EmailStatus.INQUIRY.getMessage());
+		twoDaysAhead.setDatePharmacySaysReady(DateHelper.getStartOfDayXDaysInAdvance(2));
+		twoDaysAhead.setNonGuessableId("4");
+		twoDaysAhead.setStatus(EmailStatus.PROCESSING.getMessage());
+
+		emailRepository.save(beforeCollected);
+		emailRepository.save(before);
+		emailRepository.save(dayAhead);
+		emailRepository.save(dayAheadButInquiry);
+		emailRepository.save(twoDaysAhead);
+		
+		Date midnightTwoDaysAhead = DateHelper.getStartOfDayXDaysInAdvance(2);
+		ArrayList<EmailEntity> allUncollectedBeforeTwoDaysAhead = emailRepository.findAllReadyBy(midnightTwoDaysAhead);
+		
+		assertEquals(2, allUncollectedBeforeTwoDaysAhead.size());
+		for (EmailEntity emailEntity: allUncollectedBeforeTwoDaysAhead) {
+			Date medReadyDate = emailEntity.getDatePharmacySaysReady();
+			assertEquals(emailEntity.getStatus(), EmailStatus.PROCESSING.getMessage());
+			assertTrue(medReadyDate.equals(before.getDatePharmacySaysReady()) 
+					|| medReadyDate.equals(dayAhead.getDatePharmacySaysReady()));
+		}
 	}
 }
