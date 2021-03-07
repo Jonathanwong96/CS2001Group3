@@ -81,7 +81,7 @@ public class MedicationCountImpl implements MedicationCountService {
 	}
 	
 	
-	private Date getPredictedEndDate(MedicationForResidentEntity medForRes, double lastCount, boolean isMorningCount) {
+	public Date getPredictedEndDate(MedicationForResidentEntity medForRes, double lastCount, boolean isMorningCount) {
 		//ideally we'll use the count history to estimate this. if not we'll leave as null for now
 		
 		

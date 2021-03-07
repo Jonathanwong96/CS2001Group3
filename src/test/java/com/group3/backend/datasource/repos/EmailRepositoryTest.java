@@ -35,7 +35,7 @@ public class EmailRepositoryTest {
 	void canGetOutAllNonCollectedMedicationRequests() {
 		//test should get out all uncollected entities tomorrow or earlier
 		
-		//Commented out as was made for old DB code. Will be updated soon - testing file uploads on remote server atm.
+//		//Commented out as was made for old DB code. Will be updated soon - testing file uploads on remote server atm.
 //		EmailEntity beforeCollected = new EmailEntity();
 //		EmailEntity before = new EmailEntity();
 //		EmailEntity dayAhead = new EmailEntity();
