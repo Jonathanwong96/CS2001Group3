@@ -73,7 +73,14 @@ public class TaskServiceImpl implements TaskService{
         	TaskResponse toReturn = new TaskResponse();
         	
         	// possible nullpointer problem bellow -- fix coming soon™
+        	try {
         	if(taskRequest.getCareWorkerId()!= taskEntity.getCareWorkerId()) {
+        		Optional<CareWorkerEntity> resp2 = careWorkerRepository.findById(taskRequest.getCareWorkerId());
+                CareWorkerEntity taskWorker = resp2.get();
+                taskEntity.setCareWorker(taskWorker);
+        	}
+        	}catch(Exception ex) {
+        		//temp solution for nullpointer trigered when task is unassigned
         		Optional<CareWorkerEntity> resp2 = careWorkerRepository.findById(taskRequest.getCareWorkerId());
                 CareWorkerEntity taskWorker = resp2.get();
                 taskEntity.setCareWorker(taskWorker);
