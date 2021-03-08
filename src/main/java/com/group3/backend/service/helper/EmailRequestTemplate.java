@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.group3.backend.datasource.entity.EmailEntity;
+//import com.group3.backend.datasource.entity.EmailEntity;
 import com.group3.backend.ui.model.request.EmailRequest;
 
 @Component

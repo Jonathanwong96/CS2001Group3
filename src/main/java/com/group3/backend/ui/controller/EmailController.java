@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.backend.service.EmailService;
-import com.group3.backend.ui.model.request.EmailRequest;
+//import com.group3.backend.ui.model.request.EmailRequest;
 import com.group3.backend.ui.model.request.MedicationOrderStatusRequest;
 import com.group3.backend.ui.model.request.NewEmailRequest;
 import com.group3.backend.ui.model.response.EmailContentResponse;

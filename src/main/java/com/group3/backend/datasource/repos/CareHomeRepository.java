@@ -10,5 +10,5 @@ import com.group3.backend.datasource.entity.CareHomeEntity;
 
 @Repository
 public interface CareHomeRepository extends CrudRepository<CareHomeEntity, Long> {
-	ArrayList<AutomaticEmailEntity> findAllByUsesAutoEmail(boolean usesAutomaticEmail);
+	ArrayList<CareHomeEntity> findAllByUsesAutoEmail(boolean usesAutomaticEmail);
 }

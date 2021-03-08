@@ -16,13 +16,13 @@ public class MedicationEntity implements Serializable {
 	@Id
     @GeneratedValue
     private long medicationId;
-    
+
     private String name;
     private String description;
-    
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy="medication")
     private List<MedicationForResidentEntity> allResidentsForMedication;
-    
+
 	public String getName() {
 		return name;
 	}

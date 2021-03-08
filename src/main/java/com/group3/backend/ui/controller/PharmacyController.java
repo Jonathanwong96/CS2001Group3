@@ -1,10 +1,10 @@
 package com.group3.backend.ui.controller;
 
 import com.group3.backend.ui.model.request.PharmacyRequest;
-import com.group3.backend.ui.model.request.UserDetailsRequestModel;
+//import com.group3.backend.ui.model.request.UserDetailsRequestModel;
 import com.group3.backend.ui.model.response.PharmacyResponse;
 import com.group3.backend.service.PharmacyService;
-import org.springframework.beans.BeanUtils;
+//import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

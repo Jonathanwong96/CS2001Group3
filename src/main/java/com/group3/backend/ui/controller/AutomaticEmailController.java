@@ -35,7 +35,7 @@ public class AutomaticEmailController {
     	return automaticEmailService.updateAutomaticEmail(autoEmailRequest);
     }
     
-    @GetMapping(path="send-emails-for-alerts")
+    @GetMapping(path="auto-send-emails-for-alerts")
     public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
     	return automaticEmailService.sendEmailsForAllNewAlerts();
     }

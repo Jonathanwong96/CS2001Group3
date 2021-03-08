@@ -57,10 +57,6 @@ public class CareHomeEntity implements Serializable {
 		this.careWorkers = careWorkers;
 	}
 	
-	public long getCareHomeId() {
-		return careHomeId;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -92,5 +88,12 @@ public class CareHomeEntity implements Serializable {
 	public void setPharmacies(List<PharmacyEntity> pharmacies) {
 		this.pharmacies = pharmacies;
 	}
+	
+    public long getCareHomeId() {
+		return careHomeId;
+	}
 
+	public void setCareHomeId(long careHomeId) {
+		this.careHomeId = careHomeId;
+	}
 }

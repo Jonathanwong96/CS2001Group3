@@ -32,6 +32,11 @@ public class MedicationController {
     	return medicationService.getAllMedicationsForCareHome(careHomeId);
     }
     
+    @GetMapping(path="resident")
+    public ArrayList<MedicationResponse> getMedicationsForResident(@RequestParam long residentId) {
+    	return medicationService.getAllMedicationsForResident(residentId);
+    }
+    
     @PostMapping
     public MedicationForResidentResponse addMedicationForResident(@RequestBody AddMedicationRequest addMedReq) {
     	return medicationForResidentService.addMedicationForResident(addMedReq);
