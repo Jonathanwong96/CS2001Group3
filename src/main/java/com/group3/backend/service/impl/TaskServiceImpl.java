@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.group3.backend.datasource.entity.CareHomeEntity;
 import com.group3.backend.datasource.entity.CareWorkerEntity;
-import com.group3.backend.datasource.entity.ResidentEntity;
 import com.group3.backend.datasource.entity.TaskEntity;
 import com.group3.backend.datasource.repos.CareHomeRepository;
 import com.group3.backend.datasource.repos.CareWorkerRepository;
@@ -21,7 +20,6 @@ import com.group3.backend.service.TaskService;
 import com.group3.backend.service.helper.Utility;
 import com.group3.backend.ui.model.request.TaskRequest;
 import com.group3.backend.ui.model.response.ErrorMessages;
-import com.group3.backend.ui.model.response.ResidentResponse;
 import com.group3.backend.ui.model.response.TaskResponse;
 
 @Service

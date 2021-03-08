@@ -8,9 +8,13 @@ import com.group3.backend.service.helper.Utility;
 import com.group3.backend.ui.model.request.CareWorkerRequest;
 import com.group3.backend.ui.model.response.CareWorkerResponse;
 import com.group3.backend.ui.model.response.ErrorMessages;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -66,7 +70,8 @@ public class CareWorkerServiceImpl implements CareWorkerService {
     }
     
     @Override
-	public Object deleteCareWorker(long careWorkerId) {
+	public Object deleteCareWorker(long careWorkerId) throws SQLIntegrityConstraintViolationException {
+    	try {
     	if (careWorkerRepository.existsById(careWorkerId)) {
     		Optional<CareWorkerEntity> carWrkEnt = careWorkerRepository.findById(careWorkerId);
         	CareWorkerEntity careWorkerEntity = carWrkEnt.get();
@@ -83,6 +88,15 @@ public class CareWorkerServiceImpl implements CareWorkerService {
     	else {
     		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
     	}
+    	}catch (Exception ex) {
+    		// trying to delete a careworker assigned to a task(different table) throws an SQLIntegrityConstraintViolationException
+    		// added this to prompt an alert on the front-end
+    		HashMap<String, String> response = new HashMap<String, String>();
+    		response.put("status", "Deletion failed");
+    		response.put("operationMessage", "Care worker with ID "+careWorkerId+" is asigned to a task and cannot be deleted");
+    		return response;
+    	}
+    	
 	}
     
     @Override

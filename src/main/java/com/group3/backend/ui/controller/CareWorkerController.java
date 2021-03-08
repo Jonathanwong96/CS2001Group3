@@ -1,5 +1,6 @@
 package com.group3.backend.ui.controller;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class CareWorkerController {
 	}
 	
 	@DeleteMapping(produces="application/json")
-	public Object deleteCareWorker(@RequestParam long careWorkerId) {
+	public Object deleteCareWorker(@RequestParam long careWorkerId) throws SQLIntegrityConstraintViolationException {
 		return careWorkerService.deleteCareWorker(careWorkerId);
 	}
 	

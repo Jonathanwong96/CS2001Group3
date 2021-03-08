@@ -73,7 +73,6 @@ public class ResidentServiceImpl implements ResidentService {
     		Optional<ResidentEntity> resEnt = residentRepository.findById(residentId);
         	ResidentEntity residentEntity = resEnt.get();
         	if (residentEntity.isArchived()) {
-        		//?enter a passcode request for extra security?
         		residentRepository.deleteById(residentId);
         		// credit : https://stackoverflow.com/a/30895501/13242162
             	return Collections.singletonMap("operationMessage", "Resident profile by ID #"+residentId+" was deleted");
