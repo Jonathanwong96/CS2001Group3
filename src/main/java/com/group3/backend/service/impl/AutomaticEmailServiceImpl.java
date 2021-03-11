@@ -1,6 +1,7 @@
 package com.group3.backend.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -62,27 +63,46 @@ public class AutomaticEmailServiceImpl implements AutomaticEmailService {
 	}
 
 
-	//  waiting on alerts work to be completed
+	// only to be used by cronjob for mass sending of emails.
 	public ArrayList<EmailResponse> sendEmailsForAllNewAlerts() {
-		ArrayList<EmailResponse> emailsSent = new ArrayList<>();
+		ArrayList<EmailResponse> emailsSent = new ArrayList<>();	
 		
-		ArrayList<AlertEntity> allAlerts = alertRepository.findAll();
+		ArrayList<CareHomeEntity> allHomes = new ArrayList<CareHomeEntity>((Collection<? extends CareHomeEntity>) careHomeRepository.findAll());
+		if (allHomes.size() == 0) {
+			return new ArrayList<>();
+		}
+		
+		ArrayList<AlertEntity> allAlerts = getAllAlertsToSendFromCareHomes(allHomes);
 		for (AlertEntity alert: allAlerts) {
-			if (alert.getEmail() == null) {
-				//then there's no email that's been sent for this alert.
-				try {
-					EmailResponse emailResp = emailService.saveMedicationRequestEmail(alert.getId());
-					emailsSent.add(emailResp);
-				} catch (Exception e) {
-					EmailResponse badEmail = new EmailResponse();
-					badEmail.setStatus("Failed for alert Id: " + alert.getId());
-					emailsSent.add(badEmail);
-				}
+			try {
+				EmailResponse emailResp = emailService.saveMedicationRequestEmail(alert.getId());
+				emailsSent.add(emailResp);
+			} catch (Exception e) {
+				EmailResponse badEmail = new EmailResponse();
+				badEmail.setStatus("Failed for alert Id: " + alert.getId());
+				emailsSent.add(badEmail);
 			}
 		}
 		return emailsSent;
 	}
 	
+	public ArrayList<AlertEntity> getAllAlertsToSendFromCareHomes(ArrayList<CareHomeEntity> careHomes) {
+		ArrayList<AlertEntity> allAlertsToSend = new ArrayList<>();
+		
+		for (CareHomeEntity careHome: careHomes) {
+			if (careHome.isUsesAutoEmail()) {
+				careHome.getResidents().forEach(res -> {
+					res.getAllMedicationsForResident().forEach(medForRes -> {
+						medForRes.getAlertsForMedication().forEach(alert -> {
+							if (alert.getEmail() == null) {
+								allAlertsToSend.add(alert);
+							}
+						});
+					});
+				});
+			}
+		}
+		return allAlertsToSend;
+	}
 	
-
 }

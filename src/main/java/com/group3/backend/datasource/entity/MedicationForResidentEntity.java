@@ -33,11 +33,11 @@ public class MedicationForResidentEntity implements Serializable {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "medForResident")
     private List<AlertEntity> alertsForMedication;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationForResident")
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationForResident")
     private List<MedicationCountEntity> medicationCounts;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationforResident")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicationforResident")
     private List<MedicationDoseEntity> medicationDoses;
 
     
@@ -83,5 +83,13 @@ public class MedicationForResidentEntity implements Serializable {
 
 	public void setPharmacy(PharmacyEntity pharmacy) {
 		this.pharmacy = pharmacy;
+	}
+	
+    public void setMedicationCounts(List<MedicationCountEntity> medicationCounts) {
+		this.medicationCounts = medicationCounts;
+	}
+    
+    public void setAlertsForMedication(List<AlertEntity> alertsForMedication) {
+		this.alertsForMedication = alertsForMedication;
 	}
 }

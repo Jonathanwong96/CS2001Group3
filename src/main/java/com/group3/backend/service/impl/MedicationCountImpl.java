@@ -81,7 +81,7 @@ public class MedicationCountImpl implements MedicationCountService {
 	}
 	
 	
-	private Date getPredictedEndDate(MedicationForResidentEntity medForRes, double lastCount, boolean isMorningCount) {
+	public Date getPredictedEndDate(MedicationForResidentEntity medForRes, double lastCount, boolean isMorningCount) {
 		//ideally we'll use the count history to estimate this. if not we'll leave as null for now
 		
 		
@@ -94,8 +94,13 @@ public class MedicationCountImpl implements MedicationCountService {
 				countsDoneAtSameTime.add(count);
 			}
 		}
-		Collections.sort(counts);
-		MedicationCountEntity savedCount = counts.get(0);
+		Collections.sort(countsDoneAtSameTime);
+		
+		if (countsDoneAtSameTime.size() == 0) {
+			return null;
+		}
+		
+		MedicationCountEntity savedCount = countsDoneAtSameTime.get(0);
 		int daysBetween = DateHelper.findDaysBetween(new Date(), savedCount.getCountDoneOnDate());
 		double diff = savedCount.getCount() - lastCount;
 		
@@ -104,7 +109,7 @@ public class MedicationCountImpl implements MedicationCountService {
 		} else {
 			double diffPerDay = diff/daysBetween;
 			Date endDate = new Date();
-			while (lastCount > 0) {
+			while (lastCount >= 0) {
 				endDate = DateHelper.addDays(endDate, 1);
 				lastCount-=diffPerDay;
 			}
