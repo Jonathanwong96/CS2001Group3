@@ -111,6 +111,7 @@ public class TaskServiceImpl implements TaskService{
                 BeanUtils.copyProperties(tEntity, tResponse, "careWorkerId");
         	}
             tResponse.setOperationMessage("task returned");
+            tResponse.setCareWorkerName(tEntity.getCareWorker().getFullName());
             toReturn.add(tResponse);
         }
         return toReturn;

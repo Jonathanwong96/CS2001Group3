@@ -9,6 +9,7 @@ public class TaskResponse {
 	private Long taskId;	
 	private Long careWorkerId;
 	private Long careHomeId;
+	private String careWorkerName;
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 	private Date dueTime;
 	
@@ -57,5 +58,11 @@ public class TaskResponse {
 	}
 	public void setCareWorkerId(Long careWorkerId) {
 		this.careWorkerId = careWorkerId;
+	}
+	public String getCareWorkerName() {
+		return careWorkerName;
+	}
+	public void setCareWorkerName(String careWorkerName) {
+		this.careWorkerName = careWorkerName;
 	}
 }
