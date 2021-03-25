@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.group3.backend.service.AlertService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,12 @@ public class MedicationCountImpl implements MedicationCountService {
 	@Autowired MedicationForResidentRepository medForResRepository;
 	@Autowired MedicationCountRepository medCountRespository;
 	@Autowired MedicationCountService medicationCountService;
+	@Autowired AlertService alertService;
 	
 	@Override
 	public MedicationCountEntity getMostRecentCount(List<MedicationCountEntity> allCounts) {
 		ArrayList<MedicationCountEntity> listCopy = new ArrayList<>(allCounts); //copying arraylist so we don't mutate argument
-		Collections.sort(listCopy); //uses comparator on MedicationCountEntity
+		Collections.sort(listCopy, Collections.reverseOrder()); //uses comparator on MedicationCountEntity
 		return listCopy.get(0);
 	}
 
@@ -52,6 +54,12 @@ public class MedicationCountImpl implements MedicationCountService {
 		toSave.setMedicationForResident(medForRes.get());
 		toSave.setCareWorkerName(medCountRequest.getCareWorkerName());
 		MedicationCountEntity savedCount = medCountRespository.save(toSave);
+		if (savedCount.getCyclePredictedToEndOn() != null) {
+			int daysBetween = DateHelper.findDaysBetween(new Date(), savedCount.getCyclePredictedToEndOn());
+			if (daysBetween <= 14 && daysBetween >= 0) {
+				alertService.createAlert(savedCount);
+			}
+		}
 		MedicationCountResponse toReturn = new MedicationCountResponse();
 		BeanUtils.copyProperties(savedCount, toReturn);
 		return toReturn;
@@ -68,7 +76,7 @@ public class MedicationCountImpl implements MedicationCountService {
 		});
 		Collections.sort(allCounts);
 		
-		ArrayList<MedicationCountResponse> toReturn = new ArrayList();
+		ArrayList<MedicationCountResponse> toReturn = new ArrayList<>();
 		allCounts.forEach(count -> {
 			MedicationCountResponse resp = new MedicationCountResponse();
 			BeanUtils.copyProperties(count, resp);
@@ -88,22 +96,21 @@ public class MedicationCountImpl implements MedicationCountService {
 		//should discount the count if it was done last night or the same morning.
 		
 		ArrayList<MedicationCountEntity> counts = new ArrayList<>(medForRes.getMedicationCounts());
-		ArrayList<MedicationCountEntity> countsDoneAtSameTime = new ArrayList<>();
-		for (MedicationCountEntity count: counts) {
-			if (count.isMorningCount() == isMorningCount) {
-				countsDoneAtSameTime.add(count);
-			}
-		}
-		Collections.sort(countsDoneAtSameTime);
-		
-		if (countsDoneAtSameTime.size() == 0) {
+
+		Collections.sort(counts);
+		if (counts.size() == 0) {
 			return null;
 		}
 		
-		MedicationCountEntity savedCount = countsDoneAtSameTime.get(0);
-		int daysBetween = DateHelper.findDaysBetween(new Date(), savedCount.getCountDoneOnDate());
+		MedicationCountEntity savedCount = counts.get(0);
+		double daysBetween = DateHelper.findDaysBetween(new Date(), savedCount.getCountDoneOnDate());
 		double diff = savedCount.getCount() - lastCount;
-		
+		if (isMorningCount && !savedCount.isMorningCount()) {
+			daysBetween-=0.5;
+		} else if (!isMorningCount && savedCount.isMorningCount()) {
+			daysBetween+=0.5;
+		}
+
 		if (diff <= 0 || daysBetween > 7) {
 			return null; //avoid infinite end date or inaccurate reading
 		} else {

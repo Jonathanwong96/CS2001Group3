@@ -1,6 +1,7 @@
 package com.group3.backend.service.helper;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -180,13 +181,13 @@ public class EmailRequestTemplate {
 			"</table>\n" + 
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif\"><![endif]-->\n" + 
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
-			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;white-space: pre-wrap\">Hi there, this is from [users_email] using caringforcarehomes.com\n" + 
+			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;white-space: pre-wrap\">Hi there, this is from '[users_email]' using carehomehelper.tech\n" +
 			"\n" + 
 			"We're running low on [medication] for [resident] and would like to order another cycle. Their current cycle ends on [date]. Please could you click on one of the buttons below to inform the app whether this is possible or not?\n" + 
 			"\n" + 
 			"Thankyou!\n" + 
 			"\n" + 
-			"[users_name] from [care_home_name]</div>\n" + 
+			"[care_home_name]</div>\n" +
 			"</div>\n" + 
 			"<!--[if mso]></td></tr></table><![endif]-->\n" + 
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"divider\" role=\"presentation\" style=\"table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;\" valign=\"top\" width=\"100%\">\n" + 
@@ -232,8 +233,8 @@ public class EmailRequestTemplate {
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif\"><![endif]-->\n" + 
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
 			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;\">\n" + 
-			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">Caring For Care Homes is a system designed to automate medication requests for when stock is running low, saving time for Care Home Workers.</span></p>\n" + 
-			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">www.caringforcarehomes.com</span></p>\n" + 
+			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">Caring Home Helper is a system designed to automate medication requests for when stock is running low, saving time for Care Home Workers.</span></p>\n" +
+			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">www.carehomehelper.tech</span></p>\n" + 
 			"</div>\n" + 
 			"</div>\n" + 
 			"<!--[if mso]></td></tr></table><![endif]-->\n" + 
@@ -281,7 +282,10 @@ public class EmailRequestTemplate {
     	
     	String pattern = "dd-MM-yyyy";
     	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-    	template = template.replace("[date]", sdf.format(emailRequest.getCycleEndDate()));
+    	try {
+			template = template.replace("[date]", sdf.format(emailRequest.getCycleEndDate()));
+		} catch (Exception e) {
+		}
     	return template;
 	}
 	

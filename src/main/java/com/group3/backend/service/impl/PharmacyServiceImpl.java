@@ -28,13 +28,18 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public PharmacyResponse createPharmacy(PharmacyRequest pharmacyRequest) {
-    	PharmacyResponse toReturn = new PharmacyResponse();
-    	PharmacyEntity pharmacyEntity = new PharmacyEntity();
-        BeanUtils.copyProperties(pharmacyRequest, pharmacyEntity);
-        PharmacyEntity savedPharmacy = pharmacyRepository.save(pharmacyEntity);
-        BeanUtils.copyProperties(savedPharmacy, toReturn);
-
-        return toReturn;
+        Optional<CareHomeEntity> resp = careHomeRepository.findById(pharmacyRequest.getCareHomeId());
+        if (resp.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());
+        } else {
+            PharmacyResponse toReturn = new PharmacyResponse();
+            PharmacyEntity pharmacyEntity = new PharmacyEntity();
+            BeanUtils.copyProperties(pharmacyRequest, pharmacyEntity);
+            pharmacyEntity.setCareHome(resp.get());
+            PharmacyEntity savedPharmacy = pharmacyRepository.save(pharmacyEntity);
+            BeanUtils.copyProperties(savedPharmacy, toReturn);
+            return toReturn;
+        }
     }
 
     @Override
@@ -49,6 +54,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     		for (PharmacyEntity pEntity: allPharmaciesForHome) {
                 PharmacyResponse pResponse = new PharmacyResponse();
                 BeanUtils.copyProperties(pEntity, pResponse);
+                pResponse.setPharmacyId(pEntity.getId());
                 toReturn.add(pResponse);
             }
             return toReturn;

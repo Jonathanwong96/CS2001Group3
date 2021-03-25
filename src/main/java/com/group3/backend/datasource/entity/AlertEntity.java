@@ -20,6 +20,7 @@ public class AlertEntity implements Serializable {
     private long alertId;
 	
 	private Date dateCreated;
+	private Date predictedEndDate;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	private EmailEntity email;
@@ -27,6 +28,14 @@ public class AlertEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "medForResId")
 	private MedicationForResidentEntity medForResident;
+
+	public Date getPredictedEndDate() {
+		return predictedEndDate;
+	}
+
+	public void setPredictedEndDate(Date predictedEndDate) {
+		this.predictedEndDate = predictedEndDate;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
