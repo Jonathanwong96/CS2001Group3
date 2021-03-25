@@ -55,6 +55,7 @@ public class EmailEntity implements Serializable {
 	public void setDatePharmacySaysReady(Date datePharmacySaysReady) {
 		this.datePharmacySaysReady = datePharmacySaysReady;
 	}
+
 	public Date getDateRequested() {
 		return dateRequested;
 	}

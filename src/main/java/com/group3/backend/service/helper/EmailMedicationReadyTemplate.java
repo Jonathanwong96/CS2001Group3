@@ -181,9 +181,9 @@ public class EmailMedicationReadyTemplate {
 			"</table>\n" + 
 			"<!--[if mso]><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif\"><![endif]-->\n" + 
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
-			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;white-space: pre-wrap\">Hi there, this is from [users_email] using caringforcarehomes.com\n" + 
+			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;white-space: pre-wrap\">Hi there, this is from [users_email] using carehomehelper.tech\n" + 
 			"\n" + 
-			"We had confirmation on [pharmacy_resp_date] that [medication] for [resident] would be ready to collect on [pharmacy_ready_date]. Please could you click on one of the buttons below to let us know whether we can collect the medication on this date?\n" + 
+			"We had confirmation on [pharmacy_resp_date] that [medication] for '[resident]' would be ready to collect on [pharmacy_ready_date]. Please could you click on one of the buttons below to let us know whether we can collect the medication on this date?\n" +
 			"\n" + 
 			"Thankyou!\n" + 
 			"\n" + 
@@ -234,7 +234,7 @@ public class EmailMedicationReadyTemplate {
 			"<div style=\"color:#555555;font-family:Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;\">\n" + 
 			"<div style=\"line-height: 1.2; font-size: 12px; color: #555555; font-family: Arial, &#39;Helvetica Neue&#39;, Helvetica, sans-serif; mso-line-height-alt: 14px;\">\n" + 
 			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">Caring For Care Homes is a system designed to automate medication requests for when stock is running low, saving time for Care Home Workers.</span></p>\n" + 
-			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">www.caringforcarehomes.com</span></p>\n" + 
+			"<p style=\"font-size: 10px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 12px; margin: 0;\"><span style=\"font-size: 10px;\">www.carehomehelper.tech</span></p>\n" + 
 			"</div>\n" + 
 			"</div>\n" + 
 			"<!--[if mso]></td></tr></table><![endif]-->\n" + 

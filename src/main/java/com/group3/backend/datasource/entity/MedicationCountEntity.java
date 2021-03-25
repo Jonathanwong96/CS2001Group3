@@ -75,7 +75,12 @@ public class MedicationCountEntity implements Serializable, Comparable<Medicatio
 	
 	@Override
 	public int compareTo(MedicationCountEntity that) {
-		return that.getCountDoneOnDate().compareTo(this.getCountDoneOnDate());
+		int compare = that.getCountDoneOnDate().compareTo(this.getCountDoneOnDate());
+		if (compare == 0) {
+			return this.isMorningCount ? 1 : -1;
+		} else {
+			return compare;
+		}
 	}
 	/**
 	 * @return the careWorkerName

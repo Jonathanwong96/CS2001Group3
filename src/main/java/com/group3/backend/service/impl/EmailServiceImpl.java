@@ -95,7 +95,16 @@ public class EmailServiceImpl implements EmailService {
         	ArrayList<EmailResponse> toReturn = new ArrayList<>();
         	for (EmailEntity eEntity: allEmails) {
         		EmailResponse eResponse = new EmailResponse();
-        		BeanUtils.copyProperties(eEntity, eResponse);
+        		eResponse.setStatus(eEntity.getStatus());
+        		eResponse.setNonGuessableId(eEntity.getNonGuessableId());
+				eResponse.setDateRequested(eEntity.getDateRequested());
+				eResponse.setDateLastEmailSent(eEntity.getLastEmailSentDate());
+        		eResponse.setDateMedicationToBeReady(eEntity.getDatePharmacySaysReady());
+        		eResponse.setDateUpdatedByPharmacy(eEntity.getRequestLastUpdatedByPharmacy());
+        		eResponse.setMedicationName(eEntity.getAlertCreatedFrom().getMedForResident().getMedication().getName());
+        		eResponse.setResidentName(eEntity.getAlertCreatedFrom().getMedForResident().getResident().getFullName());
+        		eResponse.setPharmacyEmail(eEntity.getPharmacy().getEmail());
+        		eResponse.setPharmacyComment(eEntity.getPharmacyInquiryComment());
         		toReturn.add(eResponse);
         	}
         	return toReturn;
@@ -141,7 +150,11 @@ public class EmailServiceImpl implements EmailService {
 		if (emailEntity == null) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessages.COULD_NOT_FIND.getErrorMessage());}
     	else {
     		EmailStatusResponse medResponse = new EmailStatusResponse();
-    		BeanUtils.copyProperties(emailEntity, medResponse);
+    		medResponse.setDateMedicationToBeReady(emailEntity.getDatePharmacySaysReady());
+    		medResponse.setMedicationName(emailEntity.getAlertCreatedFrom().getMedForResident().getMedication().getName());
+    		medResponse.setResidentName(emailEntity.getAlertCreatedFrom().getMedForResident().getResident().getFullName());
+    		medResponse.setPharmacyComment(emailEntity.getPharmacyInquiryComment());
+    		medResponse.setCareHomeName(emailEntity.getCareHomeName());
     		return medResponse;
     	}
 	}
@@ -155,7 +168,7 @@ public class EmailServiceImpl implements EmailService {
 	            mimeMessageHelper.setReplyTo(careHomeEmail);
 	            mimeMessageHelper.setTo(pharmacyEmail);
 	            mimeMessageHelper.setText(emailToSend, true); //true here to indicate sending html message
-	          //  mailSender.send(mimeMessageHelper.getMimeMessage());
+	            mailSender.send(mimeMessageHelper.getMimeMessage());
 	            return true;
 		 } catch (Exception e) {
 			 return false;
@@ -190,11 +203,7 @@ public class EmailServiceImpl implements EmailService {
 			String medicationName = alertEntity.getMedForResident().getMedication().getName();
 			String residentName = alertEntity.getMedForResident().getResident().getFullName();
 			EmailRequest emailRequest= new EmailRequest(careHomeEmail, careHomeName, pharmacyEmail, medicationName, residentName);
-			
-			//for the cycle end date, we should get the latest count and use that
-			List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
-			MedicationCountEntity mostRecentCount = medicationCountService.getMostRecentCount(counts);
-			emailRequest.setCycleEndDate(mostRecentCount.getCyclePredictedToEndOn());
+			emailRequest.setCycleEndDate(alertEntity.getPredictedEndDate());
 
 			
 			String emailToSend = emailRequestTemplate.getSubstitutedTemplate(emailRequest, nonGuessableId);			
@@ -212,6 +221,10 @@ public class EmailServiceImpl implements EmailService {
 	            EmailEntity savedEmail = emailRepository.save(emailEntity);
 	            EmailResponse toReturn = new EmailResponse();
 	            BeanUtils.copyProperties(savedEmail, toReturn);
+
+	            alertEntity.setEmail(savedEmail);
+	            alertRepository.save(alertEntity);
+
 	            return toReturn;
 	        } else {
 	        	throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.UNABLE_TO_SEND_EMAIL.getErrorMessage());
@@ -228,7 +241,7 @@ public class EmailServiceImpl implements EmailService {
 		ArrayList<EmailEntity> medicationsReadyBeforeDay = emailRepository.findAllReadyBy(beforeDate);
 		for (EmailEntity medEmail: medicationsReadyBeforeDay) {
 	        String emailToSend = emailMedicationReadyTemplate.getSubstitutedTemplate(medEmail);
-	        String subject = "Is " + medEmail.getAlertCreatedFrom().getMedForResident().getMedication() + " ready to collect?";
+	        String subject = "Is " + medEmail.getAlertCreatedFrom().getMedForResident().getMedication().getName() + " ready to collect?";
 	        String careHomeEmail = medEmail.getAlertCreatedFrom().getMedForResident().getResident().getCareHome().getEmail();
 	        String pharmacyEmail = medEmail.getPharmacy().getEmail();
 	        boolean hasSent = sendEmail(emailToSend, subject, careHomeEmail, pharmacyEmail);
@@ -341,9 +354,7 @@ public class EmailServiceImpl implements EmailService {
 		
 		//for the cycle end date, we should get the latest count and use that
 		List<MedicationCountEntity> counts = alertEntity.getMedForResident().getMedicationCounts();
-		counts.sort((thisObj, that) -> {
-			return that.getCountDoneOnDate().compareTo(thisObj.getCountDoneOnDate());
-		});;
+		Collections.sort(counts, Collections.reverseOrder());
 		emailRequest.setCycleEndDate(counts.get(0).getCyclePredictedToEndOn());
 		
 		BeanUtils.copyProperties(emailEntity, emailRequest);

@@ -7,7 +7,16 @@ public class AlertResponse {
 	private String residentName;
 	private Date cycleEndDate;
 	private long alertId;
-	
+	private String pharmacyEmail;
+
+	public void setPharmacyEmail(String pharmacyEmail) {
+		this.pharmacyEmail = pharmacyEmail;
+	}
+
+	public String getPharmacyEmail() {
+		return pharmacyEmail;
+	}
+
 	public String getMedicationName() {
 		return medicationName;
 	}

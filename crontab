@@ -1,5 +1,5 @@
 //PB-135 'As a care home worker, I'd like to have an option for the app to automatically send emails for me'
-*/5 * * * * curl localhost:8080/auto-send-emails-for-alerts
+curl localhost:8080/auto-email/auto-send-emails-for-alerts
 
 #send out emails to ask if medication is ready for collection at 08:55 every weekday
 55 8 * * 1-5 curl localhost:8080/email/ask-if-ready
